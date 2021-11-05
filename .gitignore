@@ -10,6 +10,7 @@ db.properties
 .factorypath
 .project
 .settings
+.mvn
 .springBeans
 .sts4-cache
 db.properties
