@@ -11,6 +11,7 @@ db.properties
 .project
 .settings
 .mvn
+.jpb
 .springBeans
 .sts4-cache
 db.properties

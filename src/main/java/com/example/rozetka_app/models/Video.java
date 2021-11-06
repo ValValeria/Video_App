@@ -21,6 +21,17 @@ public class Video {
     @Column
     private String description;
 
+    @ManyToOne
+    private User author;
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+
     public Integer getId() {
         return id;
     }
