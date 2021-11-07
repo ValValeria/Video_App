@@ -1,7 +1,12 @@
 package com.example.rozetka_app.services;
 
 import org.springframework.stereotype.Service;
+
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ResponseService<T> {
@@ -14,6 +19,15 @@ public class ResponseService<T> {
     }
 
     public void setData(Map<String, T> data) {
+        EnumSet<ResponseDataType> enumSet = EnumSet.allOf(ResponseDataType.class);
+
+        boolean hasRequiredKeys = enumSet.stream().map(v -> v.name().toLowerCase(Locale.ROOT))
+                .anyMatch(data::containsKey);
+
+        if(!hasRequiredKeys){
+            throw new IllegalArgumentException();
+        }
+
         this.data = data;
     }
 
