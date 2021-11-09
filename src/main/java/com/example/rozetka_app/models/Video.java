@@ -1,6 +1,7 @@
 package com.example.rozetka_app.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table
@@ -13,12 +14,14 @@ public class Video {
     private String path;
 
     @Column
+    @Size(min=10, max=40)
     private String title;
 
     @Column(columnDefinition = "date")
     private String date;
 
     @Column
+    @Size(min=10, max=400)
     private String description;
 
     @ManyToOne
