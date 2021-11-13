@@ -95,14 +95,14 @@ public class VideoController {
     }
 
     @PutMapping("/videos")
-    public void uploadVideo(@RequestParam() MultipartFile videoFile,
+    public ModelAndView uploadVideo(@RequestParam() MultipartFile videoFile,
                             @Valid() Video video,
                             BindingResult bindingResult,
                             HttpServletRequest request
                             ) throws IOException {
         if(bindingResult.hasErrors()){
-
-        } else{
+            this.responseService.setErrors(new String[]{"Check the validity of fields"});
+        } else {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss");
             String fileName = dateFormat.format(new Date()) + videoFile.getOriginalFilename();
             String path = String.format("/static/uploads/%s", fileName);
@@ -112,7 +112,7 @@ public class VideoController {
 
             try(InputStream inputStream = videoFile.getInputStream();
                 OutputStream outputStream = Files.newOutputStream(filePath)
-                ){
+            ){
                 int ch;
 
                 while((ch=inputStream.read())!=-1){
@@ -124,12 +124,18 @@ public class VideoController {
             User user = userRepository.findByUsername(principal.getName());
 
             if(user != null){
-               video.setPath(path);
-               video.setAuthor(user);
+                video.setPath(path);
+                video.setAuthor(user);
 
-               videoRepository.save(video);
-               responseService.setStatus("ok");
+                videoRepository.save(video);
+                responseService.setStatus("ok");
             }
         }
+
+        ModelAndView view = new ModelAndView("");
+        String key = ResponseDataType.RESULTS.name().toLowerCase(Locale.ROOT);
+        view.addObject(key, this.responseService);
+
+        return view;
     }
 }
