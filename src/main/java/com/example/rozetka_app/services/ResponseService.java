@@ -46,4 +46,13 @@ public class ResponseService<T> {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public void clearData(){
+        this.status = "";
+        this.errors = new String[]{};
+
+        if(data != null){
+            this.data.clear();
+        }
+    }
 }

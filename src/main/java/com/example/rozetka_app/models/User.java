@@ -22,7 +22,7 @@ public class User {
     @Column(columnDefinition = "enum(\"user\", \"admin\") default \"user\"")
     private String role;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
@@ -52,5 +52,13 @@ public class User {
 
     public void setVideoList(List<Video> videoList) {
         this.videoList = videoList;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
