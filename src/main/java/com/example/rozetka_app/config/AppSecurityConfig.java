@@ -1,12 +1,10 @@
 package com.example.rozetka_app.config;
 
 import com.example.rozetka_app.security.AppSecurityUserRoles;
-import com.example.rozetka_app.security.CustomPermissionEvaluator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -49,8 +47,15 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .anyRequest()
-                .authenticated();
+                .authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/create-ad")
+                .and()
+                .logout()
+                .invalidateHttpSession(true)
+                .logoutSuccessUrl("/");
+        ;
     }
-
-
 }
