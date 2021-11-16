@@ -61,4 +61,8 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
+
+    public void addToVideoList(Video video){
+        this.videoList.add(video);
+    }
 }
