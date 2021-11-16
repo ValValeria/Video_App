@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.view.InternalResourceView;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -74,6 +77,15 @@ public class AppConfig {
         factoryBean.setJpaVendorAdapter(jpaVendorAdapter());
         factoryBean.afterPropertiesSet();
         return factoryBean.getNativeEntityManagerFactory();
+    }
+
+    @Bean
+    public ViewResolver viewResolver(){
+        InternalResourceViewResolver view = new InternalResourceViewResolver();
+        view.setPrefix("/WEB-INF/views/");
+        view.setSuffix(".jsp");
+
+        return view;
     }
 
     @Bean StandardServletMultipartResolver multipartResolver() {
