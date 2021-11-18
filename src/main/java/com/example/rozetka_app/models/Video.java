@@ -2,13 +2,14 @@ package com.example.rozetka_app.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 @Table
 public class Video {
     @Id
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column
     private String path;
@@ -28,6 +29,9 @@ public class Video {
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     private User author;
 
+    @OneToMany(targetEntity = Comment.class, mappedBy = "video")
+    private List<Comment> commentList;
+
     public User getAuthor() {
         return author;
     }
@@ -36,11 +40,11 @@ public class Video {
         this.author = author;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -74,5 +78,13 @@ public class Video {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
     }
 }
