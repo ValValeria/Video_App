@@ -25,6 +25,7 @@ public class Video {
     private String description;
 
     @ManyToOne
+    @JoinColumn(name = "author_id", referencedColumnName = "id")
     private User author;
 
     public User getAuthor() {

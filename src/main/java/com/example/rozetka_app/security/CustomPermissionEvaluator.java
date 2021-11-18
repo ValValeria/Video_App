@@ -35,7 +35,7 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
      */
     @Override
     public boolean hasPermission(Authentication authentication, Serializable serializable, String s, Object o) {
-        Integer id = Integer.valueOf(serializable.toString());
+        Long id = Long.valueOf(serializable.toString());
         Collection<? extends GrantedAuthority> grantedAuthorityCollection = authentication.getAuthorities();
         String key = "ROLE_" + AppSecurityUserPermissions.CAN_VIEW_PROFILES.getRole();
 

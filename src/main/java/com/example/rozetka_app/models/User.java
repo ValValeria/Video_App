@@ -16,13 +16,13 @@ public class User {
     @Column
     private String password;
 
-    @OneToMany(targetEntity = Video.class)
+    @OneToMany(targetEntity = Video.class, mappedBy = "user")
     private List<Video> videoList;
 
     @Column(columnDefinition = "enum(\"user\", \"admin\") default \"user\"")
     private String role;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 

@@ -29,7 +29,7 @@ public class ProfileController {
 
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated() && hasPermission(#id, 'com.example.rozetka_app.models.User', 'can:view_profiles')")
-    private String viewProfile(@PathVariable int id, Model model){
+    private String viewProfile(@PathVariable Long id, Model model){
         Optional<User> user = this.userRepository.findById(id);
 
         if(user.isEmpty()){
@@ -43,7 +43,7 @@ public class ProfileController {
 
     @GetMapping("/{id}/videos")
     @PreAuthorize("isAuthenticated() && hasPermission(#id, 'com.example.rozetka_app.models.User', 'can:view_profiles')")
-    private String getFavoritesVideo(@PathVariable int id, Model model){
+    private String getFavoritesVideo(@PathVariable Long id, Model model){
         Optional<User> user = this.userRepository.findById(id);
 
         if(user.isEmpty()){
@@ -57,8 +57,8 @@ public class ProfileController {
 
     @PutMapping("/{id}/videos/{videoId}")
     @PreAuthorize("isAuthenticated() && hasPermission(#id, 'com.example.rozetka_app.models.User', 'can:view_profiles')")
-    private String addToLikedVideo(@PathVariable int id,
-                                   @PathVariable int videoId){
+    private String addToLikedVideo(@PathVariable Long id,
+                                   @PathVariable Long videoId){
         Optional<User> optionalUser = this.userRepository.findById(id);
         Optional<Video> optionalVideo = this.videoRepository.findById(videoId);
         String url = "/videos";
