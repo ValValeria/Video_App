@@ -7,9 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class CustomPermissionEvaluator implements PermissionEvaluator {
@@ -30,14 +29,17 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
      * @param authentication
      * @param serializable
      * @param s String representing the target's type (usually a Java classname). Not null
-     * @param o
+     * @param o a representation of the permission object as supplied by the expression system. Not null.
      * @return
      */
     @Override
     public boolean hasPermission(Authentication authentication, Serializable serializable, String s, Object o) {
         Long id = Long.valueOf(serializable.toString());
         Collection<? extends GrantedAuthority> grantedAuthorityCollection = authentication.getAuthorities();
-        String key = "ROLE_" + AppSecurityUserPermissions.CAN_VIEW_PROFILES.getRole();
+        List<String> allPermissionsSet = EnumSet.allOf(AppSecurityUserPermissions.class)
+                                                .stream()
+                                                .map(v -> v.getRole()).collect(Collectors.toList());
+        String key = "ROLE_" + o;
 
         try {
             Class<?> clazz = Class.forName(s);

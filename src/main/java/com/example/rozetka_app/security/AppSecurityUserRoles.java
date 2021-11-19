@@ -12,16 +12,21 @@ import java.util.stream.Collectors;
 public enum AppSecurityUserRoles {
     ADMIN(EnumSet.of(AppSecurityUserPermissions.CAN_CREATE_POSTS,
             AppSecurityUserPermissions.CAN_DELETE_POSTS,
-            AppSecurityUserPermissions.CAN_VIEW_PROFILES
+            AppSecurityUserPermissions.CAN_VIEW_PROFILES,
+            AppSecurityUserPermissions.CAN_DELETE_COMMENTS
             )),
-    READER(EnumSet.of(AppSecurityUserPermissions.CAN_COMMENT));
+    READER(EnumSet.of(AppSecurityUserPermissions.CAN_DELETE_OWN_COMMENT));
 
     private final Set<AppSecurityUserPermissions> permissionsSet;
     
     AppSecurityUserRoles(Set<AppSecurityUserPermissions> permissionsSet){
         this.permissionsSet = permissionsSet;
 
-        this.permissionsSet.addAll(Set.of(AppSecurityUserPermissions.CAN_VIEW_POSTS, AppSecurityUserPermissions.CAN_VIEW_PROFILE));
+        this.permissionsSet.addAll(Set.of(AppSecurityUserPermissions.CAN_VIEW_POSTS,
+                AppSecurityUserPermissions.CAN_VIEW_PROFILE,
+                AppSecurityUserPermissions.CAN_CREATE_COMMENT,
+                AppSecurityUserPermissions.CAN_DELETE_OWN_COMMENT,
+                ));
     }
 
     public Set<AppSecurityUserPermissions> getPermissionsSet(){

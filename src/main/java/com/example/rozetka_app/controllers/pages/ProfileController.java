@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import java.util.Optional;
+import static com.example.rozetka_app.security.AppSecurityUserRolesList.CAN_VIEW_PROFILE;
 
 
 @Controller("/profile/")
@@ -28,7 +29,7 @@ public class ProfileController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("isAuthenticated() && hasPermission(#id, 'com.example.rozetka_app.models.User', 'can:view_profiles')")
+    @PreAuthorize("isAuthenticated() && hasPermission(#id, 'com.example.rozetka_app.models.User', CAN_VIEW_PROFILE)")
     private String viewProfile(@PathVariable Long id, Model model){
         Optional<User> user = this.userRepository.findById(id);
 
@@ -42,7 +43,7 @@ public class ProfileController {
     }
 
     @GetMapping("/{id}/videos")
-    @PreAuthorize("isAuthenticated() && hasPermission(#id, 'com.example.rozetka_app.models.User', 'can:view_profiles')")
+    @PreAuthorize("isAuthenticated() && hasPermission(#id, 'com.example.rozetka_app.models.User', CAN_VIEW_PROFILE)")
     private String getFavoritesVideo(@PathVariable Long id, Model model){
         Optional<User> user = this.userRepository.findById(id);
 
