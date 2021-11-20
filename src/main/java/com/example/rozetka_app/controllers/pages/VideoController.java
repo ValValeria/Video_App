@@ -45,7 +45,7 @@ public class VideoController {
     }
 
     @GetMapping("/videos/{id}")
-    public ModelAndView getVideo(@PathVariable int id,
+    public ModelAndView getVideo(@PathVariable Long id,
                                  HttpServletResponse response){
        Optional<Video> video = videoRepository.findById(id);
        ModelAndView modelAndView = new ModelAndView("video");
