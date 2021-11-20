@@ -27,7 +27,8 @@ public enum AppSecurityUserRoles {
                 AppSecurityUserPermissions.CAN_VIEW_PROFILE,
                 AppSecurityUserPermissions.CAN_CREATE_COMMENT,
                 AppSecurityUserPermissions.CAN_DELETE_OWN_COMMENT,
-                AppSecurityUserPermission.CAN_VIEW_OWN_COMMENTS
+                AppSecurityUserPermissions.CAN_VIEW_OWN_COMMENTS,
+                AppSecurityUserPermissions.CAN_ADD_LIKES
                 ));
     }
 

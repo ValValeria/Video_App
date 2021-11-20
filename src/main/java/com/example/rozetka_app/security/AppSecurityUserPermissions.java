@@ -8,7 +8,10 @@ public enum AppSecurityUserPermissions {
     CAN_VIEW_PROFILE(AppSecurityUserRolesList.CAN_VIEW_PROFILE),
     CAN_CREATE_COMMENT(AppSecurityUserRolesList.CAN_CREATE_COMMENT),
     CAN_DELETE_OWN_COMMENT(AppSecurityUserRolesList.CAN_DELETE_OWN_COMMENT),
-    CAN_DELETE_COMMENTS(AppSecurityUserRolesList.CAN_DELETE_COMMENTS);
+    CAN_VIEW_USER_COMMENTS(AppSecurityUserRolesList.CAN_VIEW_USER_COMMENTS),
+    CAN_DELETE_COMMENTS(AppSecurityUserRolesList.CAN_DELETE_COMMENTS),
+    CAN_ADD_LIKES(AppSecurityUserRolesList.CAN_ADD_LIKES),
+    CAN_VIEW_OWN_COMMENTS(AppSecurityUserRolesList.CAN_VIEW_OWN_COMMENTS);
 
     private final String role;
 

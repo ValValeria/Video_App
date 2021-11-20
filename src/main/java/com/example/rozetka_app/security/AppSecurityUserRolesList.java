@@ -14,6 +14,7 @@ public interface AppSecurityUserRolesList {
     String CAN_CREATE_COMMENT = "can:create_comments";
     String CAN_DELETE_OWN_COMMENT = "can:delete_own_video_comment";
     String CAN_DELETE_COMMENTS = "can:delete_video_comments";
+    String CAN_ADD_LIKES = "can:add_likes";
 
     static String getRoleWithPrefix(String role) {
         return "ROLE_" + role;

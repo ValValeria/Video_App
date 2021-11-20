@@ -1,5 +1,6 @@
 package com.example.rozetka_app.controllers.pages;
 
+import com.example.rozetka_app.annotations.AdminOnly;
 import com.example.rozetka_app.models.User;
 import com.example.rozetka_app.models.Video;
 import com.example.rozetka_app.repositories.UserRepository;
@@ -95,6 +96,7 @@ public class VideoController {
     }
 
     @PutMapping("/videos")
+    @AdminOnly
     public ModelAndView uploadVideo(@RequestParam() MultipartFile videoFile,
                             @Valid() Video video,
                             BindingResult bindingResult,
@@ -137,5 +139,13 @@ public class VideoController {
         view.addObject(key, this.responseService);
 
         return view;
+    }
+
+    @DeleteMapping("/videos/{id}")
+    @AdminOnly
+    public String deleteVideo(@PathVariable Long id){
+        videoRepository.deleteVideoById(id);
+
+        return "redirect:/";
     }
 }

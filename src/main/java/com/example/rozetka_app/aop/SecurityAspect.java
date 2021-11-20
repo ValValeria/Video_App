@@ -71,6 +71,12 @@ public class SecurityAspect {
         return null;
     }
 
+    /**
+     * Check if the authenticated user has the specified permission
+     * @param o
+     * @param permission
+     * @return
+     */
     private boolean checkPermission(Object o, String permission) {
         boolean isPermissionGranted = false;
         final Collection<String> authoritiesCollection = getAuthentication().getAuthorities()
@@ -134,6 +140,14 @@ public class SecurityAspect {
                     }
 
                     break;
+                case AppSecurityUserRolesList.CAN_ADD_LIKES:
+                    String canAddLikes = AppSecurityUserRolesList.getRoleWithPrefix(AppSecurityUserRolesList.CAN_ADD_LIKES);
+
+                    if(authoritiesCollection.contains(canAddLikes)){
+                        isPermissionGranted = true;
+                    }
+
+                    break;
                 case AppSecurityUserRolesList.CAN_VIEW_PROFILES:
                     String canViewOwnProfile = AppSecurityUserRolesList.getRoleWithPrefix(AppSecurityUserRolesList.CAN_VIEW_PROFILE);
                     String canViewUserProfile = AppSecurityUserRolesList.getRoleWithPrefix(AppSecurityUserRolesList.CAN_VIEW_PROFILES);
@@ -170,7 +184,7 @@ public class SecurityAspect {
         return isPermissionGranted;
     }
 
-    private Authentication getAuthentication(){
+    public static Authentication getAuthentication(){
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return securityContext.getAuthentication();
     }

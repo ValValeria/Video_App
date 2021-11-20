@@ -5,6 +5,8 @@ import com.example.rozetka_app.models.User;
 import com.example.rozetka_app.models.Video;
 import com.example.rozetka_app.repositories.UserRepository;
 import com.example.rozetka_app.repositories.VideoRepository;
+
+import static com.example.rozetka_app.security.AppSecurityUserRolesList.CAN_ADD_LIKES;
 import static com.example.rozetka_app.security.AppSecurityUserRolesList.CAN_VIEW_PROFILE;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +41,6 @@ public class ProfileController {
     )
     private String viewProfile(
             @PathVariable Long id,
-            User user,
             Model model){
         Optional<User> optionalUser = this.userRepository.findById(id);
 
@@ -54,7 +55,7 @@ public class ProfileController {
 
     @PutMapping("/{id}/videos/{videoId}")
     @SecurityPermissionsContext(
-            permission = CAN_VIEW_PROFILE,
+            permission = CAN_ADD_LIKES,
             className = com.example.rozetka_app.models.User.class
     )
     private String addToLikedVideo(@PathVariable Long id,
