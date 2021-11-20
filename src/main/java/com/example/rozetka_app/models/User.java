@@ -19,6 +19,9 @@ public class User {
     @OneToMany(targetEntity = Video.class, mappedBy = "user")
     private List<Video> videoList;
 
+    @OneToMany(targetEntity = Comment.class, mappedBy = "user")
+    private List<Comment> commentList;
+
     @Column(columnDefinition = "enum(\"user\", \"admin\") default \"user\"")
     private String role;
 
@@ -64,5 +67,13 @@ public class User {
 
     public void addToVideoList(Video video){
         this.videoList.add(video);
+    }
+
+    public List<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
     }
 }

@@ -13,7 +13,8 @@ public enum AppSecurityUserRoles {
     ADMIN(EnumSet.of(AppSecurityUserPermissions.CAN_CREATE_POSTS,
             AppSecurityUserPermissions.CAN_DELETE_POSTS,
             AppSecurityUserPermissions.CAN_VIEW_PROFILES,
-            AppSecurityUserPermissions.CAN_DELETE_COMMENTS
+            AppSecurityUserPermissions.CAN_DELETE_COMMENTS,
+            AppSecurityUserPermissions.CAN_VIEW_USER_COMMENTS
             )),
     READER(EnumSet.of(AppSecurityUserPermissions.CAN_DELETE_OWN_COMMENT));
 
@@ -26,6 +27,7 @@ public enum AppSecurityUserRoles {
                 AppSecurityUserPermissions.CAN_VIEW_PROFILE,
                 AppSecurityUserPermissions.CAN_CREATE_COMMENT,
                 AppSecurityUserPermissions.CAN_DELETE_OWN_COMMENT,
+                AppSecurityUserPermission.CAN_VIEW_OWN_COMMENTS
                 ));
     }
 
@@ -34,7 +36,9 @@ public enum AppSecurityUserRoles {
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities(){
-        return this.permissionsSet.stream().map(v -> new SimpleGrantedAuthority(v.getRole()))
+        return this.permissionsSet
+                .stream()
+                .map(v -> new SimpleGrantedAuthority("ROLE_" + v.getRole()))
                 .collect(Collectors.toList());
     }
 }
