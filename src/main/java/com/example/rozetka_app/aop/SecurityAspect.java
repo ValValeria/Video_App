@@ -1,10 +1,17 @@
 package com.example.rozetka_app.aop;
 
 import com.example.rozetka_app.annotations.SecurityPermissionsContext;
+import com.example.rozetka_app.repositories.CommentRepository;
+import com.example.rozetka_app.repositories.VideoRepository;
+import com.example.rozetka_app.security.AppSecurityUserRoles;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,7 +22,10 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -31,44 +41,127 @@ public class SecurityAspect {
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final UserRepository userRepository;
+    private final VideoRepository videoRepository;
+    private final CommentRepository commentRepository;
     private final int ENTITY_COUNT_ALLOWED = 50;
+    private boolean isPermissionGranted = false;
+    private String permission;
+    private Class<?> clazz;
+    private User authUser;
+    private List<String> authoritiesCollection;
+    private final List<String> allowedPermissionsWithoutEntity = new ArrayList<>();
+    private Collection<? extends GrantedAuthority> authoritiesGranted;
 
     @Autowired
     SecurityAspect(
             HttpServletRequest request,
             HttpServletResponse response,
-            UserRepository userRepository
+            UserRepository userRepository,
+            VideoRepository videoRepository,
+            CommentRepository commentRepository
     ) {
         this.request = request;
         this.userRepository = userRepository;
         this.response = response;
+        this.videoRepository = videoRepository;
+        this.commentRepository = commentRepository;
+
+        allowedPermissionsWithoutEntity.addAll(
+                List.of(
+                        AppSecurityUserRolesList.CAN_VIEW_VIDEO_COMMENTS,
+                        AppSecurityUserRolesList.CAN_CREATE_COMMENT,
+                        AppSecurityUserRolesList.CAN_ADD_LIKES
+                )
+        );
     }
 
-    @Around("@annotation(com.example.rozetka_app.annotations.SecurityPermissionsContext)")
-    private Object handlePermissionCheck(ProceedingJoinPoint joinPoint) throws Throwable
-    {
-        SecurityPermissionsContext securityPermissionsContext = joinPoint.getThis()
-                .getClass().getAnnotation(SecurityPermissionsContext.class);
-        String permission = securityPermissionsContext.permission();
-        Class<?> clazz = securityPermissionsContext.className();
-        boolean isAllowed = false;
+    @Pointcut("@annotation(com.example.rozetka_app.annotations.SecurityPermissionsContext)")
+    private void pointcut() {}
 
-        for (int i = 0; i < joinPoint.getArgs().length; i++) {
-            Object object = joinPoint.getArgs()[i];
+    @Around("pointcut()")
+    private Object setUpData(ProceedingJoinPoint joinPoint) throws Throwable {
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        Method method = methodSignature.getMethod();
+        SecurityPermissionsContext securityPermissionsContext = method.getAnnotation(SecurityPermissionsContext.class);
+        this.permission = securityPermissionsContext.permission();
+        this.clazz = securityPermissionsContext.className();
+        Object retVal = null;
 
-            if(object.getClass().isAssignableFrom(clazz)){
-                isAllowed = checkPermission(object, permission);
-                break;
+        this.authoritiesGranted = getAuthentication().getAuthorities();
+        this.authoritiesCollection = this.authoritiesGranted
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+        this.authUser = this.userRepository.findByUsername(getAuthentication().getName());
+
+        if(request.getUserPrincipal() == null) {
+            this.response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            this.response.sendRedirect("/login");
+        } else {
+            retVal = joinPoint.proceed();
+        }
+
+        return retVal;
+    }
+
+    @Around("pointcut() && args(entityId, ..)")
+    private Object handlePermissionCheckById(ProceedingJoinPoint joinPoint, Long entityId) throws Throwable {
+        Object retVal = null;
+        List<Class<? extends Object>> classList = List.of(User.class, Video.class, Comment.class);
+
+        if(classList.contains(this.clazz)){
+            Object object = null;
+
+            if(this.clazz.isAssignableFrom(User.class)){
+                object = this.userRepository.findUserById(entityId);
+            }
+            if(this.clazz.isAssignableFrom(Video.class)){
+                object = this.videoRepository.findVideoById(entityId);
+            }
+            if(this.clazz.isAssignableFrom(User.class)){
+                object = this.commentRepository.findCommentById(entityId);
+            }
+
+            if(object != null) {
+                this.isPermissionGranted = this.checkPermission(object, this.permission);
             }
         }
 
-        if(isAllowed){
-            return joinPoint.proceed();
+        if(this.isPermissionGranted){
+            retVal = joinPoint.proceed();
+            this.isPermissionGranted = false;
+        } else {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        return retVal;
+    }
 
-        return null;
+    @Around("pointcut() && !args(entityId, ..)")
+    private Object handlePermissionCheck(ProceedingJoinPoint joinPoint, Long entityId) throws Throwable
+    {
+        Object retVal = null;
+        String perm = AppSecurityUserRolesList.getRoleWithPrefix(permission);
+        List<Class<? extends Object>> classList = List.of(User.class, Video.class, Comment.class);
+
+        if (classList.contains(this.clazz)){
+            if((authoritiesCollection.contains(perm)
+                && allowedPermissionsWithoutEntity.contains(perm))
+                || authoritiesGranted.containsAll(AppSecurityUserRoles.ADMIN.getAuthorities())
+            ){
+                this.isPermissionGranted = true;
+            }
+        }
+
+        if(this.isPermissionGranted){
+            retVal = joinPoint.proceed();
+
+            this.isPermissionGranted = false;
+        } else {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+
+        return retVal;
     }
 
     /**

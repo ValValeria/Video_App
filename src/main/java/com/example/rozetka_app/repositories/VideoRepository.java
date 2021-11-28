@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface VideoRepository extends JpaRepository<Video, Long> {
     List<Video> findAllByTitleLikeOrAuthorLike(String title, String author);
+    Video findVideoById(Long id);
     void deleteVideoById(Long id);
 }

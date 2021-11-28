@@ -1,5 +1,6 @@
 package com.example.rozetka_app.controllers.pages;
 
+import com.example.rozetka_app.annotations.EntityMustExists;
 import com.example.rozetka_app.annotations.SecurityPermissionsContext;
 import com.example.rozetka_app.models.User;
 import com.example.rozetka_app.models.Video;
@@ -39,16 +40,11 @@ public class ProfileController {
             permission = CAN_VIEW_PROFILE,
             className = com.example.rozetka_app.models.User.class
     )
+    @EntityMustExists(classType = User.class)
     private String viewProfile(
-            @PathVariable Long id,
+            @PathVariable(name = "id") Long entityId,
             Model model){
-        Optional<User> optionalUser = this.userRepository.findById(id);
-
-        if(optionalUser.isEmpty()){
-            return "redirect:/";
-        }
-
-        model.addAttribute("user", optionalUser.get());
+        model.addAttribute("user", this.userRepository.findUserById(entityId));
 
         return "profile";
     }
@@ -58,9 +54,10 @@ public class ProfileController {
             permission = CAN_ADD_LIKES,
             className = com.example.rozetka_app.models.User.class
     )
-    private String addToLikedVideo(@PathVariable Long id,
+    @EntityMustExists(classType = User.class)
+    private String addToLikedVideo(@PathVariable(name = "id") Long entityId,
                                    @PathVariable Long videoId){
-        Optional<User> optionalUser = this.userRepository.findById(id);
+        Optional<User> optionalUser = this.userRepository.findById(entityId);
         Optional<Video> optionalVideo = this.videoRepository.findById(videoId);
         String url = "/videos";
 

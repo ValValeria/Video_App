@@ -25,21 +25,21 @@ public class UserController {
     }
 
     @GetMapping(path = "/{id}")
-    @EntityMustExists(classType = User.class, entityKey = "id")
-    private ModelAndView getUser(@PathVariable Long id) {
+    @EntityMustExists(classType = User.class)
+    private ModelAndView getUser(@PathVariable(name = "id") Long entityId) {
         ModelAndView modelAndView = new ModelAndView("user");
-        modelAndView.addObject("user", this.userRepository.getById(id));
+        modelAndView.addObject("user", this.userRepository.getById(entityId));
 
         return modelAndView;
     }
 
     @DeleteMapping(path = "/{id}")
-    @EntityMustExists(classType = User.class, entityKey = "id")
+    @EntityMustExists(classType = User.class)
     private void deleteUser(
-         @PathVariable Long id,
+         @PathVariable(name = "id") Long entityId,
          HttpServletResponse response
     ) throws IOException {
-       this.userRepository.deleteById(id);
+       this.userRepository.deleteById(entityId);
        response.sendRedirect("/login");
     }
 }

@@ -1,6 +1,7 @@
 package com.example.rozetka_app.controllers.pages;
 
 import com.example.rozetka_app.annotations.AdminOnly;
+import com.example.rozetka_app.annotations.EntityMustExists;
 import com.example.rozetka_app.models.User;
 import com.example.rozetka_app.models.Video;
 import com.example.rozetka_app.repositories.UserRepository;
@@ -45,22 +46,15 @@ public class VideoController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping("/videos/{id}")
-    public ModelAndView getVideo(@PathVariable Long id,
-                                 HttpServletResponse response){
-       Optional<Video> video = videoRepository.findById(id);
+    @GetMapping("/videos/{entityId}")
+    @EntityMustExists(classType = Video.class)
+    public ModelAndView getVideo(@PathVariable Long entityId){
+       Video video = videoRepository.findVideoById(entityId);
        ModelAndView modelAndView = new ModelAndView("video");
        String key = ResponseDataType.RESULTS.name().toLowerCase(Locale.ROOT);
        modelAndView.addObject(key, this.responseService);
 
-       if(video.isPresent()){
-           responseService.setData(Map.of(key, video.get()));
-       } else {
-           final String redirectUrl = ServletUriComponentsBuilder.fromCurrentRequest()
-                   .replacePath("/").toUriString();
-           response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-           response.encodeRedirectURL(redirectUrl);
-       }
+       responseService.setData(Map.of(key, video));
 
        return modelAndView;
     }
