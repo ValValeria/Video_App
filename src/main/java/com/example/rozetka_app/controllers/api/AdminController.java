@@ -1,8 +1,8 @@
 package com.example.rozetka_app.controllers.api;
 
-import com.azure.core.annotation.Delete;
 import com.example.rozetka_app.annotations.AdminOnly;
 import com.example.rozetka_app.repositories.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,15 +26,5 @@ public class AdminController {
         modelAndView.addObject("users", userRepository.findAll());
 
         return modelAndView;
-    }
-
-    @DeleteMapping(path = "/users")
-    private void deleteUsers() {
-
-    }
-
-    @PutMapping(path = "/users")
-    private void updateUsers() {
-
     }
 }

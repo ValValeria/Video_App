@@ -2,10 +2,11 @@ package com.example.rozetka_app.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table
+@Table(name = "rozetka_videos")
 public class Video {
     @Id
     @Column(name = "id", nullable = false)
@@ -18,8 +19,8 @@ public class Video {
     @Size(min=10, max=40)
     private String title;
 
-    @Column(columnDefinition = "date")
-    private String date;
+    @Column(name = "created_at", columnDefinition = "datetime")
+    private LocalDateTime createdAt;
 
     @Column
     @Size(min=10, max=400)
@@ -64,12 +65,12 @@ public class Video {
         this.title = title;
     }
 
-    public String getDate() {
-        return date;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setCreatedAt(LocalDateTime date) {
+        this.createdAt = date;
     }
 
     public String getDescription() {

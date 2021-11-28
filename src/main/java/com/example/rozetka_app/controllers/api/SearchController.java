@@ -13,7 +13,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
-@RestController("/api")
+@RestController("/api/search")
 public class SearchController {
     private final VideoRepository videoRepository;
     private final ResponseService<List<Video>> responseService;
@@ -26,7 +26,7 @@ public class SearchController {
         this.responseService = responseService;
     }
 
-    @GetMapping("/search")
+    @GetMapping("/")
     public Object search(@RequestParam() String search){
         String searchText = "%" + search + "%";
         List<Video> videoList = videoRepository.findAllByTitleLikeOrAuthorLike(searchText, searchText);

@@ -1,9 +1,10 @@
 package com.example.rozetka_app.models;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "java_comments")
+@Table(name = "rozetka_comments")
 public class Comment {
     @Id
     @Column(name = "id", nullable = false)
@@ -12,8 +13,8 @@ public class Comment {
     @Column
     private String content;
 
-    @Column
-    private String date;
+    @Column(name = "created_at", columnDefinition = "datetime")
+    private LocalDateTime createdAt;
 
     @ManyToOne(targetEntity = Video.class)
     @JoinColumn(name = "video_id", referencedColumnName = "id")
@@ -39,12 +40,12 @@ public class Comment {
         this.content = content;
     }
 
-    public String getDate() {
-        return date;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Video getVideo() {

@@ -79,15 +79,6 @@ public class AppConfig {
         return factoryBean.getNativeEntityManagerFactory();
     }
 
-    @Bean
-    public ViewResolver viewResolver(){
-        InternalResourceViewResolver view = new InternalResourceViewResolver();
-        view.setPrefix("/WEB-INF/views/");
-        view.setSuffix(".jsp");
-
-        return view;
-    }
-
     @Bean StandardServletMultipartResolver multipartResolver() {
         return new StandardServletMultipartResolver();
     }
