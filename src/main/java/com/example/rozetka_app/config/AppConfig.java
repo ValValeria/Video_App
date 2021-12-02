@@ -1,5 +1,6 @@
 package com.example.rozetka_app.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -27,8 +28,9 @@ import java.util.Properties;
 @EnableTransactionManagement
 @PropertySource(value = "classpath:db.properties")
 public class AppConfig {
-    private Environment environment;
+    private final Environment environment;
 
+    @Autowired
     AppConfig(Environment environment){
         this.environment = environment;
     }

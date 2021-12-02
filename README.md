@@ -8,7 +8,13 @@ The app is under development
 
 ## How to run the app
 * Firstly, run the following sql queries: <br/>
-```aidl
+```mysql
+create table rozetka_static(
+   id int AUTO_INCREMENT PRIMARY key,
+   day date not null,
+   ips varchar(1000) not null
+);
+
 create table rozetka_users(
     id int AUTO_INCREMENT PRIMARY key,
     username varchar(50) not null,
