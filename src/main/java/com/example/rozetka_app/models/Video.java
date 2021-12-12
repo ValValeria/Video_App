@@ -33,6 +33,18 @@ public class Video {
     @OneToMany(targetEntity = Comment.class, mappedBy = "video")
     private List<Comment> commentList;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public User getAuthor() {
         return author;
     }

@@ -30,7 +30,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Controller("/api")
+@Controller()
+@RequestMapping("/api")
 public class VideoController {
     private final VideoRepository videoRepository;
     private final ResponseService<Object> responseService;

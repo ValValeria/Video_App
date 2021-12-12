@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriBuilder;
@@ -26,7 +27,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Controller("/signup")
+@Controller()
+@RequestMapping("/signup")
 @PreAuthorize("isAnonymous()")
 public class SignupController {
     private final UserRepository userRepository;
