@@ -43,14 +43,13 @@ public class SecurityAspect {
     private final UserRepository userRepository;
     private final VideoRepository videoRepository;
     private final CommentRepository commentRepository;
-    private final int ENTITY_COUNT_ALLOWED = 50;
     private boolean isPermissionGranted = false;
     private String permission;
     private Class<?> clazz;
-    private User authUser;
     private List<String> authoritiesCollection;
     private final List<String> allowedPermissionsWithoutEntity = new ArrayList<>();
     private Collection<? extends GrantedAuthority> authoritiesGranted;
+    private User authUser;
 
     @Autowired
     SecurityAspect(
@@ -78,23 +77,27 @@ public class SecurityAspect {
     @Pointcut("@annotation(com.example.rozetka_app.annotations.SecurityPermissionsContext)")
     private void pointcut() {}
 
-    @Around("pointcut()")
-    private Object setUpData(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Before("pointcut()")
+    private void setUpData(JoinPoint joinPoint) {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
         SecurityPermissionsContext securityPermissionsContext = method.getAnnotation(SecurityPermissionsContext.class);
         this.permission = securityPermissionsContext.permission();
         this.clazz = securityPermissionsContext.className();
-        Object retVal = null;
-
         this.authoritiesGranted = getAuthentication().getAuthorities();
         this.authoritiesCollection = this.authoritiesGranted
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
-        this.authUser = this.userRepository.findByUsername(getAuthentication().getName());
 
-        if(request.getUserPrincipal() == null) {
+        authUser = this.userRepository.findByUsername(getAuthentication().getName());
+    }
+
+    @Around("pointcut()")
+    private Object setUpData(ProceedingJoinPoint joinPoint) throws Throwable {
+        Object retVal = null;
+
+        if(request.getUserPrincipal() == null || this.authUser.getUsername().length() <= 0) {
             this.response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             this.response.sendRedirect("/login");
         } else {
@@ -181,6 +184,7 @@ public class SecurityAspect {
         if (o instanceof Comment) {
             Comment comment = (Comment) o;
 
+            int ENTITY_COUNT_ALLOWED = 50;
             switch (permission) {
                 case AppSecurityUserRolesList.CAN_DELETE_COMMENTS:
                     String role = AppSecurityUserRolesList.getRoleWithPrefix(AppSecurityUserRolesList.CAN_DELETE_OWN_COMMENT);

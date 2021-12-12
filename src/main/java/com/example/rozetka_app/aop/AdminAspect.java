@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
 
-@Component
 @Aspect
+@Component
 public class AdminAspect {
     private final HttpServletResponse response;
     private final UserRepository userRepository;

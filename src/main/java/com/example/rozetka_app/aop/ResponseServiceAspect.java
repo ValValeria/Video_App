@@ -7,11 +7,15 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
 @Aspect
+@Component
 public class ResponseServiceAspect {
-    @Autowired
     private ResponseService<Object> responseService;
+
+    @Autowired
+    public ResponseServiceAspect(ResponseService<Object> responseService) {
+        this.responseService = responseService;
+    }
 
     @Before("execution( public * com.example.rozetka_app.*(..))")
     private void clearData(){

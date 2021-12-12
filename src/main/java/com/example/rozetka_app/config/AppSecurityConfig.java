@@ -15,6 +15,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true,
+        securedEnabled = true
+)
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     private final String[] paths = new String[]{"/static/*", "/"};
     private final String[] adminPaths = new String[]{"/management/*"};

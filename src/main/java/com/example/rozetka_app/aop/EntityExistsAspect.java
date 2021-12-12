@@ -18,8 +18,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 
-@Component
 @Aspect
+@Component
 public class EntityExistsAspect {
     private final HttpServletResponse response;
     private final CommentRepository commentRepository;
