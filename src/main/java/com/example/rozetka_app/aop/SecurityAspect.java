@@ -49,7 +49,6 @@ public class SecurityAspect {
     private List<String> authoritiesCollection;
     private final List<String> allowedPermissionsWithoutEntity = new ArrayList<>();
     private Collection<? extends GrantedAuthority> authoritiesGranted;
-    private User authUser;
 
     @Autowired
     SecurityAspect(
@@ -77,38 +76,29 @@ public class SecurityAspect {
     @Pointcut("@annotation(com.example.rozetka_app.annotations.SecurityPermissionsContext)")
     private void pointcut() {}
 
-    @Before("pointcut()")
-    private void setUpData(JoinPoint joinPoint) {
+    private void setUpData(JoinPoint joinPoint) throws Throwable {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
         SecurityPermissionsContext securityPermissionsContext = method.getAnnotation(SecurityPermissionsContext.class);
         this.permission = securityPermissionsContext.permission();
         this.clazz = securityPermissionsContext.className();
+
         this.authoritiesGranted = getAuthentication().getAuthorities();
         this.authoritiesCollection = this.authoritiesGranted
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        authUser = this.userRepository.findByUsername(getAuthentication().getName());
-    }
-
-    @Around("pointcut()")
-    private Object setUpData(ProceedingJoinPoint joinPoint) throws Throwable {
-        Object retVal = null;
-
-        if(request.getUserPrincipal() == null || this.authUser.getUsername().length() <= 0) {
+        if(request.getUserPrincipal() == null) {
             this.response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             this.response.sendRedirect("/login");
-        } else {
-            retVal = joinPoint.proceed();
         }
-
-        return retVal;
     }
 
     @Around("pointcut() && args(entityId, ..)")
     private Object handlePermissionCheckById(ProceedingJoinPoint joinPoint, Long entityId) throws Throwable {
+        this.setUpData(joinPoint);
+
         Object retVal = null;
         List<Class<? extends Object>> classList = List.of(User.class, Video.class, Comment.class);
 
@@ -140,17 +130,18 @@ public class SecurityAspect {
         return retVal;
     }
 
-    @Around("pointcut() && !args(entityId, ..)")
-    private Object handlePermissionCheck(ProceedingJoinPoint joinPoint, Long entityId) throws Throwable
-    {
+    @Around("pointcut() &amp;&amp; args(Long entityId, ..)")
+    private Object handlePermissionCheck(ProceedingJoinPoint joinPoint) throws Throwable {
+        this.setUpData(joinPoint);
+
         Object retVal = null;
         String perm = AppSecurityUserRolesList.getRoleWithPrefix(permission);
-        List<Class<? extends Object>> classList = List.of(User.class, Video.class, Comment.class);
+        List<Class<?>> classList = List.of(User.class, Video.class, Comment.class);
 
         if (classList.contains(this.clazz)){
             if((authoritiesCollection.contains(perm)
-                && allowedPermissionsWithoutEntity.contains(perm))
-                || authoritiesGranted.containsAll(AppSecurityUserRoles.ADMIN.getAuthorities())
+                    && allowedPermissionsWithoutEntity.contains(perm))
+                    || authoritiesGranted.containsAll(AppSecurityUserRoles.ADMIN.getAuthorities())
             ){
                 this.isPermissionGranted = true;
             }

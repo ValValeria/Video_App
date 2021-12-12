@@ -1,7 +1,8 @@
 package com.example.rozetka_app.aop;
 
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Component;
 import com.example.rozetka_app.annotations.EntityMustExists;
-import com.example.rozetka_app.models.Comment;
 import com.example.rozetka_app.models.User;
 import com.example.rozetka_app.models.Video;
 import com.example.rozetka_app.repositories.CommentRepository;
@@ -9,14 +10,13 @@ import com.example.rozetka_app.repositories.UserRepository;
 import com.example.rozetka_app.repositories.VideoRepository;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+
 
 @Aspect
 @Component
@@ -29,15 +29,15 @@ public class EntityExistsAspect {
 
     @Autowired
     public EntityExistsAspect(
-          HttpServletResponse httpServletResponse,
-          CommentRepository commentRepository,
-          UserRepository userRepository,
-          VideoRepository videoRepository
+            HttpServletResponse httpServletResponse,
+            CommentRepository commentRepository,
+            UserRepository userRepository,
+            VideoRepository videoRepository
     ) {
-       this.response = httpServletResponse;
-       this.commentRepository = commentRepository;
-       this.userRepository = userRepository;
-       this.videoRepository = videoRepository;
+        this.response = httpServletResponse;
+        this.commentRepository = commentRepository;
+        this.userRepository = userRepository;
+        this.videoRepository = videoRepository;
     }
 
     @Around("@annotation(com.example.rozetka_app.annotations.EntityMustExists) && args(entityId, ..)")

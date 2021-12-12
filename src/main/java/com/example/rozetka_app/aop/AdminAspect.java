@@ -2,11 +2,13 @@ package com.example.rozetka_app.aop;
 
 import com.example.rozetka_app.models.User;
 import com.example.rozetka_app.repositories.UserRepository;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,15 +30,26 @@ public class AdminAspect {
 
     @Around(value = "@annotation(com.example.rozetka_app.annotations.AdminOnly)")
     private Object checkForAdmin(ProceedingJoinPoint joinPoint) throws Throwable {
-        final User authUser = this.userRepository
-                .findByUsername(SecurityAspect.getAuthentication().getName());
+        final SecurityContext securityContextHolder = SecurityContextHolder.getContext();
+        final Authentication authentication = securityContextHolder.getAuthentication();
+        boolean shouldProceed = false;
+        Object retVal = null;
 
-        if(authUser != null && authUser.getRole().equals("admin")){
-            return joinPoint.proceed();
+        if(authentication.isAuthenticated()){
+            String username = authentication.getName();
+            final User authUser = this.userRepository.findByUsername(username);
+
+            if(authUser != null && authUser.getRole().equals("admin")){
+               shouldProceed = true;
+            }
         }
 
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        if(shouldProceed) {
+            retVal = joinPoint.proceed();
+        } else {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        }
 
-        return null;
+        return retVal;
     }
 }

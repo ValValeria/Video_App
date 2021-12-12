@@ -48,4 +48,28 @@ public class Statistics {
                                         .map(v -> String.format("%s=%d", v.getKey(), v.getValue()));
        this.ips = String.join(";", stringStream.collect(Collectors.toList()));
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public LocalDate getDay() {
+        return day;
+    }
+
+    public void setDay(LocalDate day) {
+        this.day = day;
+    }
+
+    public String getIps() {
+        return ips;
+    }
+
+    public void setIps(String ips) {
+        this.ips = ips;
+    }
 }
