@@ -19,7 +19,7 @@ create table rozetka_users(
     id int AUTO_INCREMENT PRIMARY key,
     username varchar(50) not null,
     password varchar(400) not null,
-    role enum("admin", "user") default "user"
+    role enum('admin', 'user') default 'user'
 );
 
 create table rozetka_videos(

@@ -30,8 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Controller()
-@RequestMapping("/api")
+@Controller
 public class VideoController {
     private final VideoRepository videoRepository;
     private final ResponseService<Object> responseService;
@@ -65,7 +64,7 @@ public class VideoController {
                           @RequestParam int per_page,
                           HttpServletResponse response
                           ) throws IOException {
-        ModelAndView view = new ModelAndView("");
+        ModelAndView view = new ModelAndView("videos-list");
         String key = ResponseDataType.RESULTS.name().toLowerCase(Locale.ROOT);
         view.addObject(key, this.responseService);
 
@@ -129,7 +128,7 @@ public class VideoController {
             }
         }
 
-        ModelAndView view = new ModelAndView("");
+        ModelAndView view = new ModelAndView("videos-list");
         String key = ResponseDataType.RESULTS.name().toLowerCase(Locale.ROOT);
         view.addObject(key, this.responseService);
 
