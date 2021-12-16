@@ -12,12 +12,10 @@ import java.io.IOException;
 @Controller
 @PreAuthorize("isAuthenticated()")
 public class LogoutController {
-    @GetMapping
-    private void index(HttpServletRequest request,
-                       HttpServletResponse response
-                       ) throws ServletException, IOException {
-        String redirectUrl = ServletUriComponentsBuilder.fromContextPath(request).toString();
+    @GetMapping(value = "/logout")
+    private String index(HttpServletRequest request) throws ServletException {
         request.logout();
-        response.sendRedirect(redirectUrl);
+
+        return "redirect:/";
     }
 }

@@ -19,20 +19,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
 import java.util.Optional;
 
 
-@Controller()
-@RequestMapping("/profile")
+@Controller
+@RequestMapping(value = "/profile")
 @PreAuthorize("isAuthenticated()")
 public class ProfileController {
     private final UserRepository userRepository;
     private final VideoRepository videoRepository;
 
     @Autowired
-    public ProfileController(UserRepository userRepository,
-                             VideoRepository videoRepository
-                             ){
+    public ProfileController(
+            UserRepository userRepository,
+            VideoRepository videoRepository
+    ){
        this.userRepository = userRepository;
        this.videoRepository = videoRepository;
     }
@@ -46,7 +48,11 @@ public class ProfileController {
     private String viewProfile(
             @PathVariable(name = "id") Long entityId,
             Model model){
+        User user = this.userRepository.findUserById(entityId);
+        List<Video> videoList = user.getVideoList();
+
         model.addAttribute("user", this.userRepository.findUserById(entityId));
+        model.addAttribute("video", videoList);
 
         return "profile";
     }
@@ -75,23 +81,5 @@ public class ProfileController {
         }
 
         return url;
-    }
-
-    /**
-     * Adds likes
-     * @param id
-     * @param model
-     * @return
-     */
-    private String getFavoritesVideo(@PathVariable Long id, Model model){
-        Optional<User> user = this.userRepository.findById(id);
-
-        if(user.isEmpty()){
-            return "redirect:/";
-        }
-
-        model.addAttribute("videos", user.get().getVideoList());
-
-        return "user_videos";
     }
 }
