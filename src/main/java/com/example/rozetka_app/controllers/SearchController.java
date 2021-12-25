@@ -7,6 +7,7 @@ import com.example.rozetka_app.services.ResponseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -45,7 +46,8 @@ public class SearchController {
         Page<Video> videoPage;
 
         if(matcher.find()) {
-            videoPage = videoRepository.findAllByTitleLikeOrAuthorLike(search, search, pageRequest);
+            search = "%" + search + "%";
+            videoPage = videoRepository.findAllByText(search, Pageable.ofSize(per_page));
         } else {
             videoPage = videoRepository.findAll(pageRequest);
         }
