@@ -30,24 +30,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf().disable()
+        httpSecurity.csrf()
+                .disable()
                 .authorizeRequests()
-                .antMatchers("/create-ad").authenticated()
-                .antMatchers("/api/stat").hasRole("admin")
-                .antMatchers("/signup", "/login").anonymous()
+                .antMatchers("/public/**", "/**").permitAll()
                 .anyRequest().permitAll()
-                .and()
-                .exceptionHandling().accessDeniedPage("/login")
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/create-ad")
-                .and()
-                .rememberMe()
-                .and()
-                .logout()
-                .invalidateHttpSession(true)
-                .logoutSuccessUrl("/");
+                .and();
     }
 
     @Autowired

@@ -1,4 +1,4 @@
-package com.example.rozetka_app.controllers.pages;
+package com.example.rozetka_app.controllers;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;

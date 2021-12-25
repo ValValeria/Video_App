@@ -1,4 +1,4 @@
-package com.example.rozetka_app.controllers.pages;
+package com.example.rozetka_app.controllers;
 
 import com.example.rozetka_app.models.Comment;
 import com.example.rozetka_app.models.User;

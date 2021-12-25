@@ -1,4 +1,4 @@
-package com.example.rozetka_app.controllers.pages;
+package com.example.rozetka_app.controllers;
 
 import com.example.rozetka_app.services.ResponseService;
 import org.springframework.beans.factory.annotation.Autowired;
