@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "rozetka_users")
+@Table(name = "rozetka_app_users")
 public class User {
     @Id
     @Column(name = "id", nullable = false)
@@ -24,6 +24,9 @@ public class User {
 
     @Column(columnDefinition = "enum(\"user\", \"admin\") default \"user\"")
     private String role;
+
+    @Column(columnDefinition = "likes smallint default 0")
+    private Integer likes;
 
     public Long getId() {
         return id;
@@ -67,6 +70,14 @@ public class User {
 
     public void addToVideoList(Video video){
         this.videoList.add(video);
+    }
+
+    public Integer getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Integer likes) {
+        this.likes = likes;
     }
 
     public List<Comment> getCommentList() {

@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "rozetka_comments")
+@Table(name = "rozetka_app_comments")
 public class Comment {
     @Id
     @Column(name = "id", nullable = false)

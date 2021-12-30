@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "rozetka_videos")
+@Table(name = "rozetka_app_videos")
 public class Video {
     @Id
     @Column(name = "id", nullable = false)
