@@ -1,4 +1,4 @@
-package com.example.rozetka_app.controllers;
+package com.example.rozetka_app.controllers.api;
 
 import com.example.rozetka_app.annotations.AdminOnly;
 import com.example.rozetka_app.annotations.EntityMustExists;

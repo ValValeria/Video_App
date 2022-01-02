@@ -1,8 +1,7 @@
-package com.example.rozetka_app.controllers;
+package com.example.rozetka_app.controllers.api;
 
 import com.example.rozetka_app.models.User;
 import com.example.rozetka_app.repositories.UserRepository;
-import com.example.rozetka_app.security.AppSecurityUserPermissions;
 import com.example.rozetka_app.security.AppSecurityUserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 
 @Controller()

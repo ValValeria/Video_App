@@ -1,4 +1,4 @@
-package com.example.rozetka_app.controllers;
+package com.example.rozetka_app.controllers.api;
 
 import com.example.rozetka_app.annotations.AdminOnly;
 import com.example.rozetka_app.annotations.EntityMustExists;
@@ -21,7 +21,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;

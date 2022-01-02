@@ -1,4 +1,4 @@
-package com.example.rozetka_app.controllers;
+package com.example.rozetka_app.controllers.api;
 
 import com.example.rozetka_app.models.Comment;
 import com.example.rozetka_app.models.User;
@@ -6,20 +6,20 @@ import com.example.rozetka_app.models.Video;
 import com.example.rozetka_app.repositories.CommentRepository;
 import com.example.rozetka_app.repositories.UserRepository;
 import com.example.rozetka_app.repositories.VideoRepository;
-import com.example.rozetka_app.services.ResponseDataType;
-import com.example.rozetka_app.services.ResponseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Controller

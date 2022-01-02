@@ -1,4 +1,4 @@
-package com.example.rozetka_app.controllers;
+package com.example.rozetka_app.controllers.api;
 
 import com.example.rozetka_app.annotations.EntityMustExists;
 import com.example.rozetka_app.annotations.SecurityPermissionsContext;
@@ -6,10 +6,6 @@ import com.example.rozetka_app.models.User;
 import com.example.rozetka_app.models.Video;
 import com.example.rozetka_app.repositories.UserRepository;
 import com.example.rozetka_app.repositories.VideoRepository;
-
-import static com.example.rozetka_app.security.AppSecurityUserRolesList.CAN_ADD_LIKES;
-import static com.example.rozetka_app.security.AppSecurityUserRolesList.CAN_VIEW_PROFILE;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -21,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.example.rozetka_app.security.AppSecurityUserRolesList.CAN_ADD_LIKES;
+import static com.example.rozetka_app.security.AppSecurityUserRolesList.CAN_VIEW_PROFILE;
 
 
 @Controller
@@ -42,7 +41,7 @@ public class ProfileController {
     @GetMapping("/{id}")
     @SecurityPermissionsContext(
             permission = CAN_VIEW_PROFILE,
-            className = com.example.rozetka_app.models.User.class
+            className = User.class
     )
     @EntityMustExists(classType = User.class)
     private String viewProfile(
@@ -60,7 +59,7 @@ public class ProfileController {
     @PutMapping("/{id}/videos/{videoId}")
     @SecurityPermissionsContext(
             permission = CAN_ADD_LIKES,
-            className = com.example.rozetka_app.models.User.class
+            className = User.class
     )
     @EntityMustExists(classType = User.class)
     private String addToLikedVideo(@PathVariable(name = "id") Long entityId,
