@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 @Controller
-@RequestMapping(path = "/user")
+@RequestMapping(path = "/api/user")
 public class UserController {
     private final UserRepository userRepository;
     private final VideoRepository videoRepository;

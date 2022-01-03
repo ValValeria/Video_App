@@ -3,6 +3,7 @@ package com.example.rozetka_app.controllers.api;
 import com.example.rozetka_app.models.Video;
 import com.example.rozetka_app.repositories.VideoRepository;
 import com.example.rozetka_app.services.ResponseDataType;
+import com.example.rozetka_app.services.ResponseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,26 +12,33 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-@Controller
+@RestController
 public class SearchController {
     private final VideoRepository videoRepository;
+    private final ResponseService<Object> responseService;
 
     @Autowired
-    public SearchController(VideoRepository videoRepository){
+    public SearchController(
+            VideoRepository videoRepository,
+            ResponseService<Object> responseService
+    ){
         this.videoRepository = videoRepository;
+        this.responseService = responseService;
     }
 
-    @GetMapping("/search")
-    private ModelAndView search(
+    @GetMapping("/api/search")
+    private Object search(
             @RequestParam String search,
             @RequestParam Integer page,
             @RequestParam Integer per_page
@@ -40,7 +48,6 @@ public class SearchController {
 
         final PageRequest pageRequest = PageRequest.of(page, per_page, Sort.by("id"));
         final String resultsKey = ResponseDataType.RESULTS.name().toLowerCase(Locale.ROOT);
-        final Map<String, Object> pageDataMap = new LinkedHashMap<>();
         Page<Video> videoPage;
 
         if(matcher.find()) {
@@ -50,12 +57,13 @@ public class SearchController {
             videoPage = videoRepository.findAll(pageRequest);
         }
 
-        pageDataMap.put(resultsKey, videoPage.get().collect(Collectors.toList()));
-        pageDataMap.put("page", videoPage.getTotalPages());
+        final Map<String, Object> pageDataMap = new LinkedHashMap<>(Map.of(
+                resultsKey, videoPage.get().collect(Collectors.toList()),
+                "page", videoPage.getTotalPages()
+        ));
 
-        ModelAndView modelAndView = new ModelAndView("simple-search");
-        modelAndView.addAllObjects(pageDataMap);
+        this.responseService.setData(pageDataMap);
 
-        return modelAndView;
+        return this.responseService;
     }
 }

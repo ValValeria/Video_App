@@ -4,13 +4,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller()
-@RequestMapping("/signin")
+@RestController
+@RequestMapping("/api/signin")
 @PreAuthorize("isAnonymous()")
 public class LoginController {
-    @GetMapping("**")
-    private String loginPage(){
-        return "login";
-    }
+
 }

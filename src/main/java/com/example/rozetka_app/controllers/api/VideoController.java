@@ -33,6 +33,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
+@RequestMapping(path = "/api")
 public class VideoController {
     private final VideoRepository videoRepository;
     private final ResponseService<Object> responseService;

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @PreAuthorize("isAuthenticated()")
 public class LogoutController {
-    @GetMapping(value = "/logout")
+    @GetMapping(value = "/api/logout")
     private String index(HttpServletRequest request) throws ServletException {
         request.logout();
 

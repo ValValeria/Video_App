@@ -6,14 +6,12 @@ import com.example.rozetka_app.models.Video;
 import com.example.rozetka_app.repositories.CommentRepository;
 import com.example.rozetka_app.repositories.UserRepository;
 import com.example.rozetka_app.repositories.VideoRepository;
+import com.example.rozetka_app.services.ResponseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -22,26 +20,29 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
-@RequestMapping(path = "/comment", produces = MediaType.APPLICATION_JSON_VALUE)
+@RestController
+@RequestMapping(path = "/api/comment", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CommentController {
     private final CommentRepository commentRepository;
     private final VideoRepository videoRepository;
     private final UserRepository userRepository;
+    private final ResponseService<List<User>> responseService;
 
     @Autowired
     CommentController(
             CommentRepository commentRepository,
             VideoRepository videoRepository,
-            UserRepository userRepository
+            UserRepository userRepository,
+            ResponseService<List<User>> responseService
     ){
         this.commentRepository = commentRepository;
         this.videoRepository = videoRepository;
         this.userRepository = userRepository;
+        this.responseService = responseService;
     }
 
     @DeleteMapping("/{videoId}")
-    private String deleteComments(
+    private ResponseService<List<User>> deleteComments(
             @PathVariable Long videoId,
             HttpServletResponse response
     ){
@@ -59,11 +60,13 @@ public class CommentController {
 
             this.videoRepository.deleteVideoById(video.getId());
             this.videoRepository.save(video);
+
+            this.responseService.setStatus("ok");
         } else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
 
-        return "redirect:/";
+        return this.responseService;
     }
 
     @PostMapping("/{videoId}")
@@ -85,11 +88,13 @@ public class CommentController {
                 comment.setVideo(video);
 
                 this.commentRepository.save(comment);
+
+                this.responseService.setStatus("ok");
             } else {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
         }
 
-        return "redirect:/";
+        return this.responseService;
     }
 }
