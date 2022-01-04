@@ -1,0 +1,17 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between">
+          <span>Video App</span>
+          <div>
+            <button mat-icon-button class="mr-2">
+              <mat-icon>search</mat-icon>
+            </button>
+            <button mat-icon-button>
+              <mat-icon (click)="menuClickEvent.emit()">menu</mat-icon>
+            </button>
+          </div>
+        </div>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>
