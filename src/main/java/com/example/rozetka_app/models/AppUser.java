@@ -3,11 +3,13 @@ package com.example.rozetka_app.models;
 import javax.persistence.*;
 import java.util.List;
 
+import static javax.persistence.FetchType.EAGER;
+
 @Entity
 @Table(name = "rozetka_app_users")
-public class User {
+public class AppUser {
     @Id
-    @Column(name = "id", nullable = false)
+    @Column
     private Long id;
 
     @Column
@@ -16,17 +18,17 @@ public class User {
     @Column
     private String password;
 
-    @OneToMany(targetEntity = Video.class, mappedBy = "user")
-    private List<Video> videoList;
-
-    @OneToMany(targetEntity = Comment.class, mappedBy = "user")
-    private List<Comment> commentList;
-
     @Column(columnDefinition = "enum(\"user\", \"admin\") default \"user\"")
     private String role;
 
-    @Column(columnDefinition = "likes smallint default 0")
-    private Integer likes;
+    @OneToMany(targetEntity = Video.class, mappedBy = "user", fetch = EAGER)
+    private List<Video> videoList;
+
+    @OneToMany(targetEntity = Comment.class, mappedBy = "user", fetch = EAGER)
+    private List<Comment> commentList;
+
+    @OneToMany(targetEntity = Like.class, mappedBy = "user", fetch = EAGER)
+    private List<Like> likeList;
 
     public Long getId() {
         return id;
@@ -34,6 +36,10 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<Like> getLikeList() {
+        return likeList;
     }
 
     public String getUsername() {
@@ -70,14 +76,6 @@ public class User {
 
     public void addToVideoList(Video video){
         this.videoList.add(video);
-    }
-
-    public Integer getLikes() {
-        return likes;
-    }
-
-    public void setLikes(Integer likes) {
-        this.likes = likes;
     }
 
     public List<Comment> getCommentList() {

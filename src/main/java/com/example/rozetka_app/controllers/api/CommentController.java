@@ -1,7 +1,7 @@
 package com.example.rozetka_app.controllers.api;
 
 import com.example.rozetka_app.models.Comment;
-import com.example.rozetka_app.models.User;
+import com.example.rozetka_app.models.AppUser;
 import com.example.rozetka_app.models.Video;
 import com.example.rozetka_app.repositories.CommentRepository;
 import com.example.rozetka_app.repositories.UserRepository;
@@ -9,7 +9,6 @@ import com.example.rozetka_app.repositories.VideoRepository;
 import com.example.rozetka_app.services.ResponseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,14 +25,14 @@ public class CommentController {
     private final CommentRepository commentRepository;
     private final VideoRepository videoRepository;
     private final UserRepository userRepository;
-    private final ResponseService<List<User>> responseService;
+    private final ResponseService<List<AppUser>> responseService;
 
     @Autowired
     CommentController(
             CommentRepository commentRepository,
             VideoRepository videoRepository,
             UserRepository userRepository,
-            ResponseService<List<User>> responseService
+            ResponseService<List<AppUser>> responseService
     ){
         this.commentRepository = commentRepository;
         this.videoRepository = videoRepository;
@@ -42,7 +41,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{videoId}")
-    private ResponseService<List<User>> deleteComments(
+    private ResponseService<List<AppUser>> deleteComments(
             @PathVariable Long videoId,
             HttpServletResponse response
     ){
@@ -82,7 +81,7 @@ public class CommentController {
 
             if(optionalVideo.isPresent()) {
                 Video video = optionalVideo.get();
-                User user = this.userRepository.findByUsername(principal.getName());
+                AppUser user = this.userRepository.findByUsername(principal.getName());
 
                 comment.setUser(user);
                 comment.setVideo(video);

@@ -2,10 +2,7 @@ package com.example.rozetka_app.services;
 
 import org.springframework.stereotype.Service;
 
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -13,6 +10,14 @@ public class ResponseService<T> {
     private Map<String, T> data;
     private String[] errors;
     private String status;
+
+    private final Map<Long, String> fullErrorsInfo;
+    private final Map<Long, String> fullStatusInfo;
+
+    ResponseService() {
+        this.fullErrorsInfo = new HashMap<>();
+        this.fullStatusInfo = new HashMap<>();
+    }
 
     public Map<String, T> getData() {
         return data;
@@ -54,5 +59,21 @@ public class ResponseService<T> {
         if(data != null){
             this.data.clear();
         }
+    }
+
+    public void addFullErrorsInfo(Map<Long, String> map) {
+        this.fullErrorsInfo.putAll(map);
+    }
+
+    public void addFullStatusInfo(Map<Long, String> map) {
+        this.fullStatusInfo.putAll(map);
+    }
+
+    public Map<Long, String> getFullErrorsInfo() {
+        return fullErrorsInfo;
+    }
+
+    public Map<Long, String> getFullStatusInfo() {
+        return fullStatusInfo;
     }
 }

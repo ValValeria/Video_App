@@ -1,6 +1,8 @@
 package com.example.rozetka_app.config;
 
+import com.example.rozetka_app.intercepters.AuthInterceptor;
 import com.example.rozetka_app.intercepters.HttpRequestInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +27,15 @@ import org.springframework.web.servlet.view.JstlView;
      }
 )
 public class WebConfig implements WebMvcConfigurer {
+    private final AuthInterceptor authInterceptor;
+
+    @Autowired
+    public WebConfig(
+        AuthInterceptor authInterceptor
+    ) {
+        this.authInterceptor = authInterceptor;
+    }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/public/**").addResourceLocations("/resources/");
@@ -33,6 +44,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new HttpRequestInterceptor());
+        registry.addInterceptor(this.authInterceptor);
     }
 
     @Bean

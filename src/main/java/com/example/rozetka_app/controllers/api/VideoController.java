@@ -2,12 +2,14 @@ package com.example.rozetka_app.controllers.api;
 
 import com.example.rozetka_app.annotations.AdminOnly;
 import com.example.rozetka_app.annotations.EntityMustExists;
-import com.example.rozetka_app.models.User;
+import com.example.rozetka_app.models.AppUser;
 import com.example.rozetka_app.models.Video;
 import com.example.rozetka_app.repositories.UserRepository;
 import com.example.rozetka_app.repositories.VideoRepository;
 import com.example.rozetka_app.services.ResponseDataType;
 import com.example.rozetka_app.services.ResponseService;
+import com.example.rozetka_app.statuscodes.DefinedErrors;
+import com.example.rozetka_app.statuscodes.DefinedStatusCodes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,7 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Controller
+@RestController
 @RequestMapping(path = "/api")
 public class VideoController {
     private final VideoRepository videoRepository;
@@ -51,56 +53,49 @@ public class VideoController {
 
     @GetMapping("/videos/{entityId}")
     @EntityMustExists(classType = Video.class)
-    public ModelAndView getVideo(@PathVariable Long entityId){
+    public Object getVideo(@PathVariable Long entityId){
        Video video = videoRepository.findVideoById(entityId);
-       ModelAndView modelAndView = new ModelAndView("video");
        String key = ResponseDataType.RESULTS.name().toLowerCase(Locale.ROOT);
-       modelAndView.addObject(key, this.responseService);
 
        responseService.setData(Map.of(key, video));
 
-       return modelAndView;
+       return this.responseService;
     }
 
     @GetMapping("/videos")
-    public ModelAndView getVideos(@RequestParam int page,
-                          @RequestParam int per_page,
-                          HttpServletResponse response
-                          ) throws IOException {
-        ModelAndView view = new ModelAndView("videos-list");
-        String key = ResponseDataType.RESULTS.name().toLowerCase(Locale.ROOT);
-        view.addObject(key, this.responseService);
-
-        if(page < 0 || per_page < 0){
-           final String redirectUrl = ServletUriComponentsBuilder.fromCurrentRequest()
-                    .replacePath("/error").toUriString();
-           response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-           response.sendRedirect(redirectUrl);
-        }
-
-        Page<Video> videosPage = videoRepository.findAll(PageRequest.of(page, per_page));
+    public Object getVideos(
+         @RequestParam int page,
+         @RequestParam int per_page
+    ) throws IOException {
         HashMap<String, Object> hashMap = new HashMap<>();
 
-        if(videosPage.hasContent()){
-            hashMap.put(key, videosPage.get().collect(Collectors.toList()));
-        } else{
-            hashMap.put(key, Collections.emptyList());
+        if(page < 0 || per_page < 0){
+           this.responseService.addFullErrorsInfo(DefinedErrors.INVALID_QUERY.getAllInfo());
+        } else {
+           Page<Video> videosPage = videoRepository.findAll(PageRequest.of(page, per_page));
+
+           if(videosPage.hasContent()){
+              hashMap.put("results", videosPage.get().collect(Collectors.toList()));
+           } else{
+              hashMap.put("results", Collections.emptyList());
+           }
+
+           this.responseService.setData(hashMap);
         }
 
-        responseService.setData(Map.of(key, hashMap));
-
-        return view;
+        return this.responseService;
     }
 
     @PutMapping("/videos")
     @AdminOnly
-    public ModelAndView uploadVideo(@RequestParam() MultipartFile videoFile,
-                            @Valid() Video video,
-                            BindingResult bindingResult,
-                            HttpServletRequest request
-                            ) throws IOException {
+    public Object uploadVideo(
+            @RequestParam() MultipartFile videoFile,
+            @Valid() Video video,
+            BindingResult bindingResult,
+            HttpServletRequest request
+    ) throws IOException {
         if(bindingResult.hasErrors()){
-            this.responseService.setErrors(new String[]{"Check the validity of fields"});
+            this.responseService.addFullErrorsInfo(DefinedErrors.INPUT_FIELD_ERRORS.getAllInfo());
         } else {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss");
             String fileName = dateFormat.format(new Date()) + videoFile.getOriginalFilename();
@@ -120,7 +115,7 @@ public class VideoController {
             }
 
             Principal principal = request.getUserPrincipal();
-            User user = userRepository.findByUsername(principal.getName());
+            AppUser user = userRepository.findByUsername(principal.getName());
 
             if(user != null){
                 video.setPath(path);
@@ -131,17 +126,17 @@ public class VideoController {
             }
         }
 
-        ModelAndView view = new ModelAndView("videos-list");
         String key = ResponseDataType.RESULTS.name().toLowerCase(Locale.ROOT);
-        view.addObject(key, this.responseService);
+        this.responseService.setData(Map.of(key, this.responseService));
 
-        return view;
+        return this.responseService;
     }
 
     @DeleteMapping("/videos/{id}")
     @AdminOnly
     public String deleteVideo(@PathVariable Long id){
-        videoRepository.deleteVideoById(id);
+        this.videoRepository.deleteVideoById(id);
+        this.responseService.addFullStatusInfo(DefinedStatusCodes.STATUS_OK.getAllInfo());
 
         return "redirect:/";
     }

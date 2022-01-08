@@ -9,7 +9,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.example.rozetka_app.models.Comment;
-import com.example.rozetka_app.models.User;
+import com.example.rozetka_app.models.AppUser;
 import com.example.rozetka_app.models.Video;
 import com.example.rozetka_app.repositories.UserRepository;
 import com.example.rozetka_app.security.AppSecurityUserRolesList;
@@ -100,18 +99,18 @@ public class SecurityAspect {
         this.setUpData(joinPoint);
 
         Object retVal = null;
-        List<Class<? extends Object>> classList = List.of(User.class, Video.class, Comment.class);
+        List<Class<? extends Object>> classList = List.of(AppUser.class, Video.class, Comment.class);
 
         if(classList.contains(this.clazz)){
             Object object = null;
 
-            if(this.clazz.isAssignableFrom(User.class)){
+            if(this.clazz.isAssignableFrom(AppUser.class)){
                 object = this.userRepository.findUserById(entityId);
             }
             if(this.clazz.isAssignableFrom(Video.class)){
                 object = this.videoRepository.findVideoById(entityId);
             }
-            if(this.clazz.isAssignableFrom(User.class)){
+            if(this.clazz.isAssignableFrom(AppUser.class)){
                 object = this.commentRepository.findCommentById(entityId);
             }
 
@@ -136,7 +135,7 @@ public class SecurityAspect {
 
         Object retVal = null;
         String perm = AppSecurityUserRolesList.getRoleWithPrefix(permission);
-        List<Class<?>> classList = List.of(User.class, Video.class, Comment.class);
+        List<Class<?>> classList = List.of(AppUser.class, Video.class, Comment.class);
 
         if (classList.contains(this.clazz)){
             if((authoritiesCollection.contains(perm)
@@ -170,7 +169,7 @@ public class SecurityAspect {
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
-        final User authUser = this.userRepository.findByUsername(getAuthentication().getName());
+        final AppUser authUser = this.userRepository.findByUsername(getAuthentication().getName());
 
         if (o instanceof Comment) {
             Comment comment = (Comment) o;
@@ -211,8 +210,8 @@ public class SecurityAspect {
             }
         }
 
-        if (o instanceof User) {
-            User user = (User) o;
+        if (o instanceof AppUser) {
+            AppUser user = (AppUser) o;
 
             switch (permission) {
                 case AppSecurityUserRolesList.CAN_DELETE_PROFILES:

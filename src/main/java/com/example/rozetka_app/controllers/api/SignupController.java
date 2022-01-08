@@ -1,6 +1,7 @@
 package com.example.rozetka_app.controllers.api;
 
-import com.example.rozetka_app.models.User;
+import com.example.rozetka_app.statuscodes.DefinedErrors;
+import com.example.rozetka_app.models.AppUser;
 import com.example.rozetka_app.repositories.UserRepository;
 import com.example.rozetka_app.security.AppSecurityUserRoles;
 import com.example.rozetka_app.services.ResponseService;
@@ -11,20 +12,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.web.util.DefaultUriBuilderFactory;
-import org.springframework.web.util.UriBuilder;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.Collection;
 
 @RestController
@@ -44,24 +37,29 @@ public class SignupController {
     }
 
     @PostMapping("")
-    protected Object signup(@Valid User user, BindingResult bindingResult) {
+    protected Object signup(@Valid AppUser user, BindingResult bindingResult) {
         if(!bindingResult.hasErrors()){
-            User user1 = userRepository.findByUsername(user.getUsername());
+            AppUser user1 = userRepository.findByUsername(user.getUsername());
 
             if(user1 == null){
                 user.setRole("user");
                 user.setPassword(user.getPassword());
                 userRepository.save(user);
+
                 authenticateUser(user);
 
                 this.responseService.setStatus("ok");
+            } else {
+                this.responseService.addFullErrorsInfo(DefinedErrors.AUTH_USER_EXISTS.getAllInfo());
             }
+        } else {
+            this.responseService.addFullErrorsInfo(DefinedErrors.INPUT_FIELD_ERRORS.getAllInfo());
         }
 
         return this.responseService;
     }
 
-    private void authenticateUser(User user){
+    private void authenticateUser(AppUser user){
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         Collection<? extends GrantedAuthority> authorityCollection = AppSecurityUserRoles.READER.getAuthorities();
         Authentication authentication =

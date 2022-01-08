@@ -1,6 +1,6 @@
 package com.example.rozetka_app.aop;
 
-import com.example.rozetka_app.models.User;
+import com.example.rozetka_app.models.AppUser;
 import com.example.rozetka_app.repositories.UserRepository;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -37,7 +37,7 @@ public class AdminAspect {
 
         if(authentication.isAuthenticated()){
             String username = authentication.getName();
-            final User authUser = this.userRepository.findByUsername(username);
+            final AppUser authUser = this.userRepository.findByUsername(username);
 
             if(authUser != null && authUser.getRole().equals("admin")){
                shouldProceed = true;

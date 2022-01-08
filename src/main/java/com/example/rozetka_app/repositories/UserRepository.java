@@ -1,9 +1,9 @@
 package com.example.rozetka_app.repositories;
 
-import com.example.rozetka_app.models.User;
+import com.example.rozetka_app.models.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUsername(String username);
-    User findUserById(Long id);
+public interface UserRepository extends JpaRepository<AppUser, Long> {
+    AppUser findByUsername(String username);
+    AppUser findUserById(Long id);
 }

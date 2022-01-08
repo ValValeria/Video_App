@@ -1,7 +1,7 @@
 package com.example.rozetka_app.controllers.api;
 
 import com.example.rozetka_app.annotations.AdminOnly;
-import com.example.rozetka_app.models.User;
+import com.example.rozetka_app.models.AppUser;
 import com.example.rozetka_app.repositories.UserRepository;
 import com.example.rozetka_app.services.ResponseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +16,12 @@ import java.util.Map;
 @RequestMapping("/api/admin")
 public class AdminController {
     private final UserRepository userRepository;
-    private final ResponseService<List<User>> responseService;
+    private final ResponseService<List<AppUser>> responseService;
 
     @Autowired
     public AdminController(
             UserRepository userRepository,
-            ResponseService<List<User>> responseService
+            ResponseService<List<AppUser>> responseService
     ) {
         this.userRepository = userRepository;
         this.responseService = responseService;
@@ -29,7 +29,7 @@ public class AdminController {
 
     @AdminOnly
     @GetMapping(path = "/users")
-    private ResponseService<List<User>> getUsers() {
+    private ResponseService<List<AppUser>> getUsers() {
         this.responseService.setData(Map.of("results", userRepository.findAll()));
 
         return this.responseService;

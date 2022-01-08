@@ -20,9 +20,9 @@ public class Comment {
     @JoinColumn(name = "video_id", referencedColumnName = "id")
     private Video video;
 
-    @ManyToOne(targetEntity = User.class)
+    @ManyToOne(targetEntity = AppUser.class)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    private AppUser user;
 
     public Long getId() {
         return id;
@@ -56,11 +56,11 @@ public class Comment {
         this.video = video;
     }
 
-    public User getUser() {
+    public AppUser getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(AppUser user) {
         this.user = user;
     }
 }

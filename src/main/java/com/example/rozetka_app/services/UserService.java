@@ -1,13 +1,10 @@
 package com.example.rozetka_app.services;
 
-import com.example.rozetka_app.models.User;
+import com.example.rozetka_app.models.AppUser;
 import com.example.rozetka_app.repositories.UserRepository;
-import com.example.rozetka_app.security.AppSecurityUserPermissions;
 import com.example.rozetka_app.security.AppSecurityUserRoles;
-import com.example.rozetka_app.security.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,7 +24,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(s);
+        AppUser user = userRepository.findByUsername(s);
         Collection<GrantedAuthority> collection = new ArrayList<>();
 
         if(user == null){
@@ -40,7 +37,7 @@ public class UserService implements UserDetailsService {
             collection.addAll(AppSecurityUserRoles.READER.getAuthorities());
         }
 
-        return new AppUser(
+        return new com.example.rozetka_app.security.AppUser(
                 user.getUsername(),
                 user.getPassword(),
                 collection

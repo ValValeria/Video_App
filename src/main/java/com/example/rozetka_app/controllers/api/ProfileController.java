@@ -2,19 +2,15 @@ package com.example.rozetka_app.controllers.api;
 
 import com.example.rozetka_app.annotations.EntityMustExists;
 import com.example.rozetka_app.annotations.SecurityPermissionsContext;
-import com.example.rozetka_app.models.User;
+import com.example.rozetka_app.models.AppUser;
 import com.example.rozetka_app.models.Video;
 import com.example.rozetka_app.repositories.UserRepository;
 import com.example.rozetka_app.repositories.VideoRepository;
 import com.example.rozetka_app.services.ResponseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -44,11 +40,11 @@ public class ProfileController {
     @GetMapping("/{id}")
     @SecurityPermissionsContext(
             permission = CAN_VIEW_PROFILE,
-            className = User.class
+            className = AppUser.class
     )
-    @EntityMustExists(classType = User.class)
+    @EntityMustExists(classType = AppUser.class)
     private Object viewProfile(@PathVariable(name = "id") Long entityId){
-        User user = this.userRepository.findUserById(entityId);
+        AppUser user = this.userRepository.findUserById(entityId);
 
         Map<String, Object> objectMap = new java.util.HashMap<>();
         objectMap.put("user", this.userRepository.findUserById(entityId));
@@ -62,17 +58,17 @@ public class ProfileController {
     @PutMapping("/{id}/videos/{videoId}")
     @SecurityPermissionsContext(
             permission = CAN_ADD_LIKES,
-            className = User.class
+            className = AppUser.class
     )
-    @EntityMustExists(classType = User.class)
+    @EntityMustExists(classType = AppUser.class)
     private Object addToLikedVideo(@PathVariable(name = "id") Long entityId,
                                    @PathVariable Long videoId){
-        Optional<User> optionalUser = this.userRepository.findById(entityId);
+        Optional<AppUser> optionalUser = this.userRepository.findById(entityId);
         Optional<Video> optionalVideo = this.videoRepository.findById(videoId);
 
         if(optionalUser.isPresent() && optionalVideo.isPresent()){
             Video video = optionalVideo.get();
-            User user = optionalUser.get();
+            AppUser user = optionalUser.get();
 
             user.addToVideoList(video);
             this.userRepository.deleteById(user.getId());

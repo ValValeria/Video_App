@@ -3,7 +3,7 @@ package com.example.rozetka_app.aop;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 import com.example.rozetka_app.annotations.EntityMustExists;
-import com.example.rozetka_app.models.User;
+import com.example.rozetka_app.models.AppUser;
 import com.example.rozetka_app.models.Video;
 import com.example.rozetka_app.repositories.CommentRepository;
 import com.example.rozetka_app.repositories.UserRepository;
@@ -52,13 +52,13 @@ public class EntityExistsAspect {
         Object result = null;
         Object object = null;
 
-        if(classType.isAssignableFrom(User.class)){
+        if(classType.isAssignableFrom(AppUser.class)){
             object = this.userRepository.findUserById(entityId);
         }
         if(classType.isAssignableFrom(Video.class)){
             object = this.videoRepository.findVideoById(entityId);
         }
-        if(classType.isAssignableFrom(User.class)){
+        if(classType.isAssignableFrom(AppUser.class)){
             object = this.commentRepository.findCommentById(entityId);
         }
 
