@@ -1,5 +1,6 @@
 package com.example.rozetka_app.config;
 
+import com.example.rozetka_app.filters.CustomAuthenticationFilter;
 import com.example.rozetka_app.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,10 +18,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userService;
+    private final CustomAuthenticationFilter customAuthenticationFilter;
 
     @Autowired
-    WebSecurityConfig(UserService userService){
+    WebSecurityConfig(
+        UserService userService,
+        CustomAuthenticationFilter customAuthenticationFilter
+    ){
         this.userService = userService;
+        this.customAuthenticationFilter = customAuthenticationFilter;
     }
 
     @Bean
@@ -31,11 +37,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf()
-                .disable()
-                .authorizeRequests()
+                .disable();
+
+        httpSecurity.authorizeRequests()
                 .antMatchers("/public/**", "/**").permitAll()
-                .anyRequest().permitAll()
-                .and();
+                .anyRequest().permitAll();
+
+        httpSecurity.addFilter(customAuthenticationFilter);
     }
 
     @Override

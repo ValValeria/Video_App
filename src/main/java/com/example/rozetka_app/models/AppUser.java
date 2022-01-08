@@ -1,5 +1,8 @@
 package com.example.rozetka_app.models;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -21,13 +24,16 @@ public class AppUser {
     @Column(columnDefinition = "enum(\"user\", \"admin\") default \"user\"")
     private String role;
 
-    @OneToMany(targetEntity = Video.class, mappedBy = "user", fetch = EAGER)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(targetEntity = Video.class, mappedBy = "user")
     private List<Video> videoList;
 
-    @OneToMany(targetEntity = Comment.class, mappedBy = "user", fetch = EAGER)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(targetEntity = Comment.class, mappedBy = "user")
     private List<Comment> commentList;
 
-    @OneToMany(targetEntity = Like.class, mappedBy = "user", fetch = EAGER)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(targetEntity = Like.class, mappedBy = "user")
     private List<Like> likeList;
 
     public Long getId() {
