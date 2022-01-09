@@ -44,9 +44,18 @@ public class StatisticsAspect {
             statisticsRepository.delete(statistics);
         } else {
             statistics = new Statistics();
-            statistics.addIpAddress(request.getRemoteUser());
+            statistics.addIpAddress(request.getRemoteAddr());
+            statistics.setIpsAsString(statistics.findIpsAsMap());
         }
 
+        List<Statistics> statisticsList = this.statisticsRepository.findAll(Sort.by("id").descending());
+        long id = 0;
+
+        if (statisticsList.size() > 0) {
+            id = statisticsList.get(statisticsList.size() - 1).getId() + 1;
+        }
+
+        statistics.setId(id);
         statistics.setDay(localDate);
         statisticsRepository.save(statistics);
     }

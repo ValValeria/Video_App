@@ -19,34 +19,39 @@ public class Statistics {
     @Column(columnDefinition = "date")
     private LocalDate day;
 
-    @Column()
+    @Column
     private String ips;
 
     public void addIpAddress(String ipAddress) {
-        Map<String, Integer> map = this.getIpsAsMap();
-        Integer count = map.getOrDefault(ipAddress, 0) + 1;
-        map.put(ipAddress, count);
+        if (!Objects.isNull(ipAddress)) {
+            Map<String, Integer> map = this.findIpsAsMap();
+
+            Integer count = map.getOrDefault(ipAddress, 0) + 1;
+            map.put(ipAddress, count);
+        }
     }
 
-    public Map<String, Integer> getIpsAsMap() {
+    public Map<String, Integer> findIpsAsMap() {
         if(this.ips == null) {
            this.ips = "";
         }
 
         List<String[]> list = Arrays.stream(this.ips.split(";")).map(v -> v.split("=")).collect(Collectors.toList());
-        Map<String, Integer> map = Collections.emptyNavigableMap();
+        Map<String, Integer> map = new HashMap<>();
 
         list.forEach(v -> {
-            String key = v[0];
-            Integer value = Integer.parseInt(v[1]);
+            if(v.length > 1) {
+                String key = v[0];
+                Integer value = Integer.parseInt(v[1]);
 
-            map.put(key, value);
+                map.put(key, value);
+            }
         });
 
         return map;
     }
 
-    private void setIpsAsString(Map<String, Integer> map) {
+    public void setIpsAsString(Map<String, Integer> map) {
        Stream<String> stringStream = map.entrySet()
                                         .stream()
                                         .map(v -> String.format("%s=%d", v.getKey(), v.getValue()));
