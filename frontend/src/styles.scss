@@ -5,7 +5,27 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
+@import './variables';
 
-.example-spacer {
-  flex: 1 1 auto;
+.mat-h1, .mat-headline, .mat-typography h1 {
+  font-family: inherit;
+  font-size: 4.375rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 4.5rem;
+}
+
+button {
+  border-radius: 23px !important;
+}
+
+.wrap{
+  max-width: 1000px;
+  width: 90%;
+  margin: 0 auto;
+  padding: $space_unit * 6 $space_unit * 3 0;
+}
+
+.app-mat-list{
+  min-width: 300px;
 }

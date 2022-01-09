@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderModule } from "./components/header/header.module";
 import { FooterModule } from "./components/footer/footer.module";
+import { CoreModule } from "./core/core.module";
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { FooterModule } from "./components/footer/footer.module";
   ],
   imports: [
     BrowserModule,
+    CoreModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MatSidenavModule,

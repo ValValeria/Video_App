@@ -1,5 +1,9 @@
-import {AfterViewInit, Component, ContentChild, ElementRef, ViewChild} from '@angular/core';
-import {MatDrawer} from "@angular/material/sidenav";
+import { Component, ViewChild} from '@angular/core';
+
+import { MatDrawer } from "@angular/material/sidenav";
+import {Router} from "@angular/router";
+
+type pathType = {path: string, title: string};
 
 @Component({
   selector: 'app-root',
@@ -7,11 +11,22 @@ import {MatDrawer} from "@angular/material/sidenav";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent{
-  @ContentChild("drawer", {read: MatDrawer}) matDrawer: MatDrawer | undefined;
+  @ViewChild("drawer", {read: MatDrawer}) matDrawer: MatDrawer | undefined;
+  public readonly paths: pathType[];
+
+  public constructor(private router: Router) {
+    this.paths = [
+      {path: '', title: 'Home'}
+    ];
+  }
 
   async handleMenuClick() {
     if (this.matDrawer !== undefined) {
         await this.matDrawer.toggle();
     }
+  }
+
+  handleClick(url: string): void {
+    this.router.navigateByUrl(url).then(r => console.log("Navigated"));
   }
 }
