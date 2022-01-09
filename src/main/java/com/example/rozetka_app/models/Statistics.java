@@ -29,6 +29,10 @@ public class Statistics {
     }
 
     public Map<String, Integer> getIpsAsMap() {
+        if(this.ips == null) {
+           this.ips = "";
+        }
+
         List<String[]> list = Arrays.stream(this.ips.split(";")).map(v -> v.split("=")).collect(Collectors.toList());
         Map<String, Integer> map = Collections.emptyNavigableMap();
 

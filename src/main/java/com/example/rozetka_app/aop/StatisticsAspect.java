@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Aspect
 @Component
@@ -35,17 +36,18 @@ public class StatisticsAspect {
     @Before("getMethodPointcut()")
     private void updateStatics() {
         LocalDate localDate = LocalDate.now();
-        List<Statistics> statisticsList = statisticsRepository.findAll(Sort.by("day").ascending());
-        Statistics statistics = statisticsList.get(statisticsList.size() - 1);
+        Optional<Statistics> optional = statisticsRepository.findByDayBefore(LocalDate.now());
+        Statistics statistics;
 
-        if(statisticsList.size() == 0){
-            statistics = new Statistics();
-            statistics.setDay(localDate);
-        } else {
+        if(optional.isPresent()){
+            statistics = optional.get();
             statisticsRepository.delete(statistics);
+        } else {
+            statistics = new Statistics();
+            statistics.addIpAddress(request.getRemoteUser());
         }
 
-        statistics.addIpAddress(request.getRemoteUser());
+        statistics.setDay(localDate);
         statisticsRepository.save(statistics);
     }
 }
