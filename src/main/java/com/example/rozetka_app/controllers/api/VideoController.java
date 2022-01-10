@@ -64,8 +64,8 @@ public class VideoController {
 
     @GetMapping("/videos")
     public Object getVideos(
-         @RequestParam int page,
-         @RequestParam int per_page
+         @RequestParam Integer page,
+         @RequestParam Integer per_page
     ) throws IOException {
         HashMap<String, Object> hashMap = new HashMap<>();
 
@@ -80,6 +80,10 @@ public class VideoController {
               hashMap.put("results", Collections.emptyList());
            }
 
+           hashMap.put("page", videosPage.getTotalPages());
+           hashMap.put("items", videosPage.getTotalElements());
+
+           this.responseService.setStatus("ok");
            this.responseService.setData(hashMap);
         }
 
@@ -119,7 +123,7 @@ public class VideoController {
 
             if(user != null){
                 video.setPath(path);
-                video.setAuthor(user);
+                video.setUser(user);
 
                 videoRepository.save(video);
                 responseService.setStatus("ok");

@@ -28,14 +28,10 @@ public class Video {
 
     @ManyToOne
     @JoinColumn(name = "author_id", referencedColumnName = "id")
-    private AppUser author;
+    private AppUser user;
 
     @OneToMany(targetEntity = Comment.class, mappedBy = "video")
     private List<Comment> commentList;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private AppUser user;
 
     public AppUser getUser() {
         return user;
@@ -43,14 +39,6 @@ public class Video {
 
     public void setUser(AppUser user) {
         this.user = user;
-    }
-
-    public AppUser getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(AppUser author) {
-        this.author = author;
     }
 
     public Long getId() {

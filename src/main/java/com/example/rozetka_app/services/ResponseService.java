@@ -17,6 +17,8 @@ public class ResponseService<T> {
     ResponseService() {
         this.fullErrorsInfo = new HashMap<>();
         this.fullStatusInfo = new HashMap<>();
+        this.errors = new String[]{};
+        this.status = "undefined";
     }
 
     public Map<String, T> getData() {

@@ -2,6 +2,7 @@ package com.example.rozetka_app.aop;
 
 import com.example.rozetka_app.models.Statistics;
 import com.example.rozetka_app.repositories.StatisticsRepository;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -33,7 +34,7 @@ public class StatisticsAspect {
     public void getMethodPointcut() {}
 
 
-    @Before("getMethodPointcut()")
+    @After("getMethodPointcut()")
     private void updateStatics() {
         LocalDate localDate = LocalDate.now();
         Optional<Statistics> optional = statisticsRepository.findByDayBefore(LocalDate.now());
@@ -49,7 +50,7 @@ public class StatisticsAspect {
         }
 
         List<Statistics> statisticsList = this.statisticsRepository.findAll(Sort.by("id").descending());
-        long id = 0;
+        Long id = 0L;
 
         if (statisticsList.size() > 0) {
             id = statisticsList.get(statisticsList.size() - 1).getId() + 1;
