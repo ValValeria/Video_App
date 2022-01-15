@@ -5,6 +5,7 @@ import com.example.rozetka_app.models.AppUser;
 import com.example.rozetka_app.repositories.UserRepository;
 import com.example.rozetka_app.services.ResponseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,8 +31,6 @@ public class AdminController {
     @AdminOnly
     @GetMapping(path = "/users")
     private ResponseService<List<AppUser>> getUsers() {
-        this.responseService.setData(Map.of("results", userRepository.findAll()));
-
         return this.responseService;
     }
 }

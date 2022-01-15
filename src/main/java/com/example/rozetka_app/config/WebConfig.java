@@ -1,7 +1,6 @@
 package com.example.rozetka_app.config;
 
 import com.example.rozetka_app.intercepters.HttpRequestInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;

@@ -6,7 +6,10 @@ target/
 db.properties
 dist
 tmp
+*.txt
 out-tsc
+output
+lib
 # Only exists if Bazel was run
 bazel-out
 .angular

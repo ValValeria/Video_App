@@ -42,7 +42,7 @@ public class StatisticsAspect {
 
         if(optional.isPresent()){
             statistics = optional.get();
-            statisticsRepository.delete(statistics);
+            statisticsRepository.deleteById(statistics.getId());
         } else {
             statistics = new Statistics();
             statistics.addIpAddress(request.getRemoteAddr());

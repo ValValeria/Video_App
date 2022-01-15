@@ -44,7 +44,7 @@ public class UserController {
     @GetMapping(path = "/{id}")
     @EntityMustExists(classType = AppUser.class)
     private Object getUser(@PathVariable(name = "id") Long entityId) {
-        this.responseService.setData(Map.of("user", this.userRepository.getById(entityId)));
+        this.responseService.setData(Map.of("user", this.userRepository.findById(entityId).get()));
 
         return this.responseService;
     }
