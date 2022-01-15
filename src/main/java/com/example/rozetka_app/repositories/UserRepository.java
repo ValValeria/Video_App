@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Repository
 public class UserRepository extends BaseRepository<AppUser> {
+
     public AppUser findByUsername(String username){
         return null;
     }
