@@ -8,12 +8,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.example.rozetka_app.models.AppUser;
 
 @Repository
 public class UserRepository extends BaseRepository<AppUser> {
+    private final PasswordEncoder passwordEncoder;
+
+    public UserRepository(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
     public AppUser findByUsername(String username){
         return (AppUser) this.entityManager
                 .createQuery("from User where username = :username")
@@ -27,6 +34,8 @@ public class UserRepository extends BaseRepository<AppUser> {
 
     @Override
     public void save(AppUser object) {
+        object.setPassword(passwordEncoder.encode(object.getPassword()));
+
         if (object.getId() == null) {
             this.entityManager.persist(object);
         } else {
