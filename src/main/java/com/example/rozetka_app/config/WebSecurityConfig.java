@@ -41,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/public/**", "/**").permitAll()
                 .anyRequest().permitAll();
 
-        httpSecurity.addFilter(new CustomAuthenticationFilter(this.authenticationManager()));
+        //httpSecurity.addFilter(new CustomAuthenticationFilter(this.authenticationManager()));
     }
 
     @Override

@@ -11,16 +11,16 @@ import { CoreModule } from "./core/core.module";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
-    BrowserModule,
-    CoreModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatSidenavModule,
-    HeaderModule,
-    FooterModule
+        BrowserModule,
+        CoreModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatSidenavModule,
+        HeaderModule,
+        FooterModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
