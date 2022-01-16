@@ -13,6 +13,7 @@ import com.example.rozetka_app.statuscodes.DefinedStatusCodes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -63,29 +64,21 @@ public class VideoController {
     }
 
     @GetMapping("/videos")
-    public Object getVideos(
-         @RequestParam Integer page,
-         @RequestParam Integer per_page
-    ) throws IOException {
-        HashMap<String, Object> hashMap = new HashMap<>();
+    public Object getVideos(Pageable pageable) {
+        final HashMap<String, Object> hashMap = new HashMap<>();
+        final Page<Video> videosPage = videoRepository.findAll(pageable);
 
-        if(page < 0 || per_page < 0){
-           this.responseService.addFullErrorsInfo(DefinedErrors.INVALID_QUERY.getAllInfo());
-        } else {
-           Page<Video> videosPage = videoRepository.findAll(PageRequest.of(page, per_page));
-
-           if(videosPage.hasContent()){
-              hashMap.put("results", videosPage.get().collect(Collectors.toList()));
-           } else{
-              hashMap.put("results", Collections.emptyList());
-           }
-
-           hashMap.put("page", videosPage.getTotalPages());
-           hashMap.put("items", videosPage.getTotalElements());
-
-           this.responseService.setStatus("ok");
-           this.responseService.setData(hashMap);
+        if(videosPage.hasContent()){
+            hashMap.put("results", videosPage.get().collect(Collectors.toList()));
+        } else{
+            hashMap.put("results", Collections.emptyList());
         }
+
+        hashMap.put("page", videosPage.getTotalPages());
+        hashMap.put("items", videosPage.getTotalElements());
+
+        this.responseService.setStatus("ok");
+        this.responseService.setData(hashMap);
 
         return this.responseService;
     }

@@ -1,48 +1,64 @@
 package com.example.rozetka_app.repositories;
 
-import com.example.rozetka_app.models.AppUser;
-import com.example.rozetka_app.models.Statistics;
-import org.apache.catalina.User;
+import java.util.List;
+
+import javax.persistence.Query;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+import com.example.rozetka_app.models.AppUser;
 
 @Repository
 public class UserRepository extends BaseRepository<AppUser> {
-
     public AppUser findByUsername(String username){
-        return null;
+        return (AppUser) this.entityManager
+                .createQuery("from User where username = :username")
+                .setParameter("username", username)
+                .getSingleResult();
     }
 
     public AppUser findUserById(Long id){
-        return null;
+        return this.entityManager.find(AppUser.class, id);
     }
 
     @Override
     public void save(AppUser object) {
-
-    }
-
-    @Override
-    public Optional<AppUser> findById(Long entityId) {
-        return Optional.empty();
+        if (object.getId() == null) {
+            this.entityManager.persist(object);
+        } else {
+            this.entityManager.merge(object);
+        }
     }
 
     @Override
     public void deleteById(Long id) {
-
+        this.entityManager.remove(findUserById(id));
     }
 
     @Override
-    public List<Statistics> findAll(Sort id) {
-        return null;
+    public List<AppUser> findAll(Sort id) {
+        throw new IllegalArgumentException();
     }
 
     @Override
-    public List<AppUser> findAll(PageRequest of) {
-        return null;
+    public Page<AppUser> findAll(PageRequest pageRequest) {
+        int page = pageRequest.getPageNumber();
+        int total = pageRequest.getPageSize();
+
+        Query query = this.entityManager.createQuery("from User");
+        query.setMaxResults(total);
+        query.setFirstResult(page * total);
+
+        Long size = Long.valueOf(this.entityManager
+                .createQuery("select count(*) from User")
+                .getSingleResult().toString());
+
+        Page<AppUser> appUserPage = new PageImpl(query.getResultList(), pageRequest, size);
+
+        return appUserPage;
     }
 }

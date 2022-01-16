@@ -37,11 +37,11 @@ public class StatisticsAspect {
     @After("getMethodPointcut()")
     private void updateStatics() {
         LocalDate localDate = LocalDate.now();
-        Optional<Statistics> optional = statisticsRepository.findByDayBefore(LocalDate.now());
+        List<Statistics> optional = statisticsRepository.findByDayBefore(LocalDate.now(), Sort.by("day"));
         Statistics statistics;
 
-        if(optional.isPresent()){
-            statistics = optional.get();
+        if(optional.size() > 0){
+            statistics = optional.get(optional.size() - 1);
             statisticsRepository.deleteById(statistics.getId());
         } else {
             statistics = new Statistics();
@@ -58,6 +58,7 @@ public class StatisticsAspect {
 
         statistics.setId(id);
         statistics.setDay(localDate);
+        
         statisticsRepository.save(statistics);
     }
 }

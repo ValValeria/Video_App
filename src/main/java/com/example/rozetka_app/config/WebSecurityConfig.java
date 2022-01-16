@@ -1,5 +1,6 @@
 package com.example.rozetka_app.config;
 
+import com.example.rozetka_app.filters.CustomAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.example.rozetka_app.filters.CustomAuthenticationFilter;
 import com.example.rozetka_app.services.UserService;
 
 @Configuration

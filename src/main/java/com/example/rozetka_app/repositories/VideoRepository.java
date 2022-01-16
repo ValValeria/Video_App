@@ -8,7 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.example.rozetka_app.models.Video;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface VideoRepository extends JpaRepository<Video, Long> {
     @Query("from Video v where v.user.username like :search or v.description like :search or v.title like :search")
     Page<Video> findAllByText(String search, Pageable pageable);

@@ -4,11 +4,11 @@ import java.util.Collections;
 import java.util.Map;
 
 public enum DefinedErrors {
-    AUTH_USER_EXISTS("Пользователь с таким именем уже существует", 400L),
-    AUTH_USER_NOT_EXISTS("Пользователя с таким именем нет", 401L),
-    INPUT_FIELD_ERRORS("Проверьте правильность поля", 402L),
-    NOT_FOUND_ERRORS("Данной сущности не существует", 403L),
-    INVALID_QUERY("Неправильные входные данные", 404L);
+    AUTH_USER_EXISTS("The user with such username has been in our system", 400L),
+    AUTH_USER_NOT_EXISTS("The user with such username has not been in our system", 401L),
+    INPUT_FIELD_ERRORS("Invalid input fields", 402L),
+    ENTITY_NOT_FOUND("The specified entity doesn't exist", 403L),
+    INVALID_QUERY("Invalid input query", 404L);
 
     private final String errorMessage;
     private final Long statusCode;

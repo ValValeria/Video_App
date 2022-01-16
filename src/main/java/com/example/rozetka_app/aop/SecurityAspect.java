@@ -111,7 +111,7 @@ public class SecurityAspect {
                 object = this.videoRepository.findVideoById(entityId);
             }
             if(this.clazz.isAssignableFrom(AppUser.class)){
-                object = this.commentRepository.findCommentById(entityId);
+                object = this.commentRepository.findById(entityId);
             }
 
             if(object != null) {

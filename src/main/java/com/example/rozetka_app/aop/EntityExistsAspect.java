@@ -1,6 +1,17 @@
 package com.example.rozetka_app.aop;
 
+import com.example.rozetka_app.services.ResponseService;
+import com.example.rozetka_app.statuscodes.DefinedErrors;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import org.apache.tomcat.util.json.JSONParser;
 import org.aspectj.lang.annotation.Aspect;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.security.crypto.codec.Utf8;
 import org.springframework.stereotype.Component;
 import com.example.rozetka_app.annotations.EntityMustExists;
 import com.example.rozetka_app.models.AppUser;
@@ -15,6 +26,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.Writer;
 import java.lang.reflect.Method;
 
 
@@ -25,6 +38,8 @@ public class EntityExistsAspect {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final VideoRepository videoRepository;
+    private final ResponseService<Object> responseService;
+    private Logger logger = LoggerFactory.getLogger(EntityExistsAspect.class.getName());
     private boolean isAllowed = false;
 
     @Autowired
@@ -32,12 +47,14 @@ public class EntityExistsAspect {
             HttpServletResponse httpServletResponse,
             CommentRepository commentRepository,
             UserRepository userRepository,
-            VideoRepository videoRepository
+            VideoRepository videoRepository,
+            ResponseService<Object> responseService
     ) {
         this.response = httpServletResponse;
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
         this.videoRepository = videoRepository;
+        this.responseService = responseService;
     }
 
     @Around("@annotation(com.example.rozetka_app.annotations.EntityMustExists) && args(entityId, ..)")
@@ -59,18 +76,33 @@ public class EntityExistsAspect {
             object = this.videoRepository.findVideoById(entityId);
         }
         if(classType.isAssignableFrom(AppUser.class)){
-            object = this.commentRepository.findCommentById(entityId);
+            object = this.commentRepository.findById(entityId);
         }
 
         if (object != null) {
             result = joinPoint.proceed();
         } else {
-            final String redirectUrl = ServletUriComponentsBuilder.fromCurrentRequest()
-                    .replacePath("/").toUriString();
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            response.encodeRedirectURL(redirectUrl);
+            setUpResponseError();
         }
 
         return result;
+    }
+
+    private void setUpResponseError() throws IOException {
+        final Writer writer = response.getWriter();
+        final String redirectUrl = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .replacePath("/")
+                .toUriString();
+
+        responseService.addFullErrorsInfo(DefinedErrors.ENTITY_NOT_FOUND.getAllInfo());
+        responseService.setStatus("not ok");
+
+        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        response.encodeRedirectURL(redirectUrl);
+        response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
+
+        writer.write(new JSONObject(this.responseService).toString());
     }
 }

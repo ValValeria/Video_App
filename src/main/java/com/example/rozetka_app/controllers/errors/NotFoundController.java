@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 @Controller
 @ControllerAdvice
@@ -28,7 +26,7 @@ public class NotFoundController {
     @ExceptionHandler(Throwable.class)
     @RequestMapping(path = "/error", method = RequestMethod.GET)
     private Object handleError(Throwable throwable) {
-       logger.info("Handling error");
+       logger.info("Handling error. Error class: " + throwable.getClass().getName());
 
        throwable.printStackTrace();
 
@@ -36,4 +34,6 @@ public class NotFoundController {
 
        return this.responseService;
     }
+
+
 }

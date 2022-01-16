@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -18,11 +19,12 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @EnableWebMvc
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableSpringDataWebSupport
 @ComponentScan(
-     basePackages = "com.example.rozetka_app",
-     excludeFilters = {
-         @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)
-     }
+        basePackages = "com.example.rozetka_app",
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)
+        }
 )
 public class WebConfig implements WebMvcConfigurer {
 
