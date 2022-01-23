@@ -1,24 +1,29 @@
 package com.example.rozetka_app.models;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
-import static javax.persistence.FetchType.EAGER;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Table(name = "rozetka_app_users")
 public class AppUser {
     @Id
-    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, insertable = true, updatable = true)
     private Long id;
 
     @Column
+    @Size(min = 10, max = 25)
+    @NotNull
     private String username;
 
     @Column
+    @Size(min = 10, max = 20)
+    @NotNull
     private String password;
 
     @Column(columnDefinition = "enum(\"user\", \"admin\") default \"user\"")

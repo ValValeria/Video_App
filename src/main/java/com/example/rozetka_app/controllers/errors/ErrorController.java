@@ -10,23 +10,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @ControllerAdvice
-public class NotFoundController {
+public class ErrorController {
     private final String TAG = NotFoundController.class.getName();
     private final Logger logger = LoggerFactory.getLogger(TAG);
     private final ResponseService<Object> responseService;
 
     @Autowired
-    NotFoundController(ResponseService<Object> responseService){
+    ErrorController(ResponseService<Object> responseService){
         this.responseService = responseService;
     }
 
     @ExceptionHandler(RefreshTokenMissingException.class)
     private Object handleError(Throwable throwable) {
-       logger.info("Handling error. Error class: " + throwable.getClass().getName());
+        logger.info("Handling error. Error class: " + throwable.getClass().getName());
 
-       return this.responseService;
+        return this.responseService;
     }
 }

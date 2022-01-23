@@ -9,6 +9,7 @@ public class AppUser implements UserDetails {
     private final String password;
     private final String username;
     private final Collection<? extends GrantedAuthority> authorities;
+    private String role;
 
     public AppUser(String username,
                    String password,
@@ -17,6 +18,16 @@ public class AppUser implements UserDetails {
         this.password = password;
         this.username = username;
         this.authorities = authorities;
+
+        this.init();
+    }
+
+    private void init() {
+        if (this.authorities.containsAll(AppSecurityUserRoles.ADMIN.getAuthorities())) {
+            this.role = "admin";
+        } else {
+            this.role = "user";
+        }
     }
 
     @Override
@@ -52,5 +63,9 @@ public class AppUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public String getRole() {
+        return role;
     }
 }

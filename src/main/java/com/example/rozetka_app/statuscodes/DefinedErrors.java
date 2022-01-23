@@ -8,7 +8,8 @@ public enum DefinedErrors {
     AUTH_USER_NOT_EXISTS("The user with such username has not been in our system", 401L),
     INPUT_FIELD_ERRORS("Invalid input fields", 402L),
     ENTITY_NOT_FOUND("The specified entity doesn't exist", 403L),
-    INVALID_QUERY("Invalid input query", 404L);
+    REFRESH_TOKEN_MISSING("Refresh token is missing", 404L),
+    INVALID_QUERY("Invalid input query", 405L);
 
     private final String errorMessage;
     private final Long statusCode;

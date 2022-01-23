@@ -2,5 +2,7 @@ package com.example.rozetka_app.services;
 
 public enum ResponseDataType {
     RESULTS,
-    RESULT
+    RESULT,
+    ACCESS_TOKEN,
+    REFRESH_TOKEN
 }

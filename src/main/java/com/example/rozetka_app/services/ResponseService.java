@@ -39,6 +39,15 @@ public class ResponseService<T> {
         this.data = data;
     }
 
+    public void setEnumData(EnumMap<ResponseDataType, T> dataHashMap) {
+        EnumSet<ResponseDataType> enumSet = EnumSet.allOf(ResponseDataType.class);
+        this.data = new HashMap<>();
+
+        enumSet.forEach(v -> {
+            this.data.put(v.name().toLowerCase(), dataHashMap.get(v));
+        });
+    }
+
     public String[] getErrors() {
         return errors;
     }

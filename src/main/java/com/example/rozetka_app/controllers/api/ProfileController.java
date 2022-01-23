@@ -14,14 +14,9 @@ import com.example.rozetka_app.statuscodes.DefinedStatusCodes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-
+import java.util.*;
 import static com.example.rozetka_app.security.AppSecurityUserRolesList.CAN_ADD_LIKES;
 import static com.example.rozetka_app.security.AppSecurityUserRolesList.CAN_VIEW_PROFILE;
-
 
 @RestController
 @RequestMapping(value = "/api/profile")
