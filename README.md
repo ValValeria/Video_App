@@ -9,6 +9,13 @@ The app is under development
 ## How to run the app
 * Firstly, run the following sql queries: <br/>
 ```mysql
+create table java_letter_list(
+    id integer auto_increment primary key,
+    message varbinary(400),
+    date date,
+    senderEmail varbinary(40)
+);
+
 create table rozetka_static(
    id int AUTO_INCREMENT PRIMARY key,
    day date not null,
