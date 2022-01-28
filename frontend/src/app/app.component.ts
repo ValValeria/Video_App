@@ -1,32 +1,26 @@
-import { Component, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 
-import { MatDrawer } from "@angular/material/sidenav";
-import {Router} from "@angular/router";
+import {auditTime} from "rxjs";
 
-type pathType = {path: string, title: string};
+import {MatDrawer} from "@angular/material/sidenav";
+
+import {menuClick$} from "./components/subjects/header-component.subject";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent{
+export class AppComponent implements OnInit{
   @ViewChild("drawer", {read: MatDrawer}) matDrawer: MatDrawer | undefined;
-  public readonly paths: pathType[];
 
-  public constructor(private router: Router) {
-    this.paths = [
-      {path: '', title: 'Home'}
-    ];
-  }
-
-  async handleMenuClick() {
-    if (this.matDrawer !== undefined) {
+  ngOnInit(): void {
+    menuClick$
+      .pipe(auditTime(100))
+      .subscribe(async(value) => {
+      if (this.matDrawer !== undefined) {
         await this.matDrawer.toggle();
-    }
-  }
-
-  handleClick(url: string): void {
-    this.router.navigateByUrl(url).then(r => console.log("Navigated"));
+      }
+    });
   }
 }

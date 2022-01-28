@@ -1,15 +1,9 @@
 <mat-drawer-container>
   <mat-drawer #drawer mode="over">
-    <mat-list class="app-mat-list">
-      <div mat-subheader>Menu</div>
-      <mat-list-item *ngFor="let item of paths"
-                     (click)="handleClick(item.path)">
-         <div>{{item.title}}</div>
-      </mat-list-item>
-    </mat-list>
+    <app-navigation-drawer></app-navigation-drawer>
   </mat-drawer>
   <div class="app w-100">
-    <app-header (menu-click)="handleMenuClick()"></app-header>
+    <app-header></app-header>
     <div class="app__content w-100">
       <router-outlet></router-outlet>
     </div>

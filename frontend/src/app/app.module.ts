@@ -8,12 +8,13 @@ import { AppComponent } from './app.component';
 import { HeaderModule } from "./components/header/header.module";
 import { FooterModule } from "./components/footer/footer.module";
 import { CoreModule } from "./core/core.module";
+import {NavigationDrawerModule} from "./components/navigation-drawer/navigation-drawer.module";
 
 @NgModule({
   declarations: [
     AppComponent,
   ],
-  imports: [
+    imports: [
         BrowserModule,
         CoreModule,
         AppRoutingModule,
@@ -21,7 +22,8 @@ import { CoreModule } from "./core/core.module";
         MatSidenavModule,
         HeaderModule,
         FooterModule,
-  ],
+        NavigationDrawerModule,
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

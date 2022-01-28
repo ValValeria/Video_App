@@ -1,4 +1,6 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component} from '@angular/core';
+
+import {menuClick$} from "../subjects/header-component.subject";
 
 @Component({
   selector: 'app-header',
@@ -6,11 +8,9 @@ import {Component, EventEmitter, Output} from '@angular/core';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent{
-  @Output("menu-click") menuClickEvent = new EventEmitter();
-
   constructor() { }
 
   handleClick() {
-    this.menuClickEvent.emit();
+    menuClick$.next(null);
   }
 }
