@@ -3,14 +3,14 @@ import { NgModule } from '@angular/core';
 import {MatCardModule} from "@angular/material/card";
 
 import { VideoCardComponent } from './video-card.component';
-import {CoreModule} from "../../core/core.module";
+import {SharedModule} from "../../shared/shared.module";
 
 @NgModule({
   declarations: [
     VideoCardComponent
   ],
   imports: [
-    CoreModule, MatCardModule
+    SharedModule, MatCardModule
   ],
   exports: [
     VideoCardComponent

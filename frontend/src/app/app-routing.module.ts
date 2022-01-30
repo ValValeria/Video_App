@@ -7,9 +7,13 @@ const routes: Routes = [
    pathMatch: 'full'
   },
   {path: 'auth',
-    loadChildren: () => import("./pages/auth/auth.module").then(v => v.AuthModule),
-    pathMatch: 'full'
+   loadChildren: () => import("./pages/auth/auth.module").then(v => v.AuthModule),
+   pathMatch: 'full'
   },
+  {
+   path: 'videos',
+   loadChildren: () => import("./pages/videos/videos.module").then(v => v.VideosModule)
+  }
 ];
 
 @NgModule({

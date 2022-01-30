@@ -14,7 +14,8 @@ export class NavigationDrawerComponent {
   public constructor(private router: Router) {
     this.paths = [
       {path: '', title: 'Home'},
-      {path: 'auth', title: 'Authenticate'}
+      {path: 'auth', title: 'Authenticate'},
+      {path: 'videos', title: 'Videos'}
     ];
   }
 

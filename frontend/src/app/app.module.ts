@@ -7,16 +7,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderModule } from "./components/header/header.module";
 import { FooterModule } from "./components/footer/footer.module";
-import { CoreModule } from "./core/core.module";
+import { SharedModule } from "./shared/shared.module";
 import {NavigationDrawerModule} from "./components/navigation-drawer/navigation-drawer.module";
+import {UserService} from "./services/user.service";
 
 @NgModule({
   declarations: [
     AppComponent,
   ],
-    imports: [
+  imports: [
         BrowserModule,
-        CoreModule,
+        SharedModule,
         AppRoutingModule,
         BrowserAnimationsModule,
         MatSidenavModule,
@@ -24,7 +25,9 @@ import {NavigationDrawerModule} from "./components/navigation-drawer/navigation-
         FooterModule,
         NavigationDrawerModule,
     ],
-  providers: [],
+  providers: [
+    {provide: UserService, useClass: UserService}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

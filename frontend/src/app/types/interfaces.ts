@@ -15,3 +15,10 @@ export interface IResponseType<T> {
 export interface IMultipleResponse<T> {
   results: T[];
 }
+
+export interface IUser{
+  isAuth: boolean;
+  username: string;
+  password: string;
+  id: number;
+}

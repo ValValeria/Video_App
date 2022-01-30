@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 
 import {menuClick$} from "../subjects/header-component.subject";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-header',
@@ -8,7 +9,9 @@ import {menuClick$} from "../subjects/header-component.subject";
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent{
-  constructor() { }
+  constructor(
+    public userService: UserService
+  ) { }
 
   handleClick() {
     menuClick$.next(null);

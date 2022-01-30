@@ -2,7 +2,7 @@ import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 
 import {HomeComponent} from "./home.component";
-import {CoreModule} from "../../core/core.module";
+import {SharedModule} from "../../shared/shared.module";
 import {SectionLayoutModule} from "../../layouts/section-layout/section-layout.module";
 
 const routes: Routes = [
@@ -11,6 +11,6 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [HomeComponent],
-  imports: [RouterModule.forChild(routes), CoreModule, SectionLayoutModule]
+  imports: [RouterModule.forChild(routes), SharedModule, SectionLayoutModule]
 })
 export class HomeModule{}

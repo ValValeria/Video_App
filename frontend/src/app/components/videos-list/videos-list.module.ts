@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 
-import { CoreModule } from "../../core/core.module";
+import { SharedModule } from "../../shared/shared.module";
 import { VideosListComponent } from "./videos-list.component";
 import {VideoCardModule} from "../video-card/video-card.module";
 
 @NgModule({
   declarations: [VideosListComponent],
   imports: [
-    CoreModule,
+    SharedModule,
     VideoCardModule
   ],
   exports: [VideosListComponent]

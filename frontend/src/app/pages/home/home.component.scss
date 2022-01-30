@@ -6,6 +6,17 @@
   h1, .home__description{
     color: white;
   }
+
+  .home__description {
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.2em;
+    letter-spacing: 0;
+    text-rendering: geometricPrecision;
+    text-transform: none;
+    text-decoration: none;
+    font-size: 18px;
+  }
 }
 
 .home__heading {

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { NavigationDrawerComponent } from './navigation-drawer.component';
-import {CoreModule} from "../../core/core.module";
+import {SharedModule} from "../../shared/shared.module";
 
 @NgModule({
   declarations: [
@@ -11,7 +11,7 @@ import {CoreModule} from "../../core/core.module";
     NavigationDrawerComponent
   ],
   imports: [
-    CoreModule
+    SharedModule
   ]
 })
 export class NavigationDrawerModule { }

@@ -1,11 +1,24 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-/* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
 @import './variables';
+
+*{
+  font-family: 'Montserrat', sans-serif;
+}
+
+.mat-flat-button.mat-primary, .mat-raised-button.mat-primary, .mat-fab.mat-primary, .mat-mini-fab.mat-primary {
+  border-radius: 0px !important;
+  font-weight: 700;
+  min-width: 140px;
+}
+
+.mat-card{
+  padding: $space_unit*2 !important;
+}
 
 .mat-h1, .mat-headline, .mat-typography h1 {
   font-family: inherit;

@@ -1,9 +1,9 @@
 import {NgModule} from "@angular/core";
 import {SectionLayoutComponent} from "./section-layout.component";
-import {CoreModule} from "../../core/core.module";
+import {SharedModule} from "../../shared/shared.module";
 
 @NgModule({
-  imports: [CoreModule],
+  imports: [SharedModule],
   declarations: [SectionLayoutComponent],
   exports: [SectionLayoutComponent]
 })
