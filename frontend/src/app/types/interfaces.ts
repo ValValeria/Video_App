@@ -12,6 +12,11 @@ export interface IResponseType<T> {
   data: T;
 }
 
+export interface ITokens{
+  refreshToken: string;
+  accessToken: string;
+}
+
 export interface IMultipleResponse<T> {
   results: T[];
 }

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import {AuthGuard} from "./guards/auth.guard";
 
 const routes: Routes = [
   {path: '',
@@ -12,11 +13,13 @@ const routes: Routes = [
   },
   {
    path: 'videos',
-   loadChildren: () => import("./pages/videos/videos.module").then(v => v.VideosModule)
+   loadChildren: () => import("./pages/videos/videos.module").then(v => v.VideosModule),
+   canLoad: [AuthGuard]
   }
 ];
 
 @NgModule({
+  providers: [AuthGuard],
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
