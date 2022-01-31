@@ -4,10 +4,13 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.rozetka_app.annotations.AdminOnly;
 import com.example.rozetka_app.annotations.EntityMustExists;
 import com.example.rozetka_app.exceptions.RefreshTokenMissingException;
 import com.example.rozetka_app.models.AppUser;
 import com.example.rozetka_app.repositories.UserRepository;
+import com.example.rozetka_app.services.ResponseDataType;
+import com.example.rozetka_app.services.ResponseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,17 +26,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
+import java.util.EnumMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/api/token")
 @PreAuthorize("isAuthenticated()")
 public class RequestTokenController {
+    private final UserRepository userRepository;
+    private final ResponseService<String> responseService;
+
     @Autowired
-    private UserRepository userRepository;
+    RequestTokenController(
+       UserRepository userRepository,
+       ResponseService<String> responseService
+    ) {
+        this.userRepository = userRepository;
+        this.responseService = responseService;
+    }
 
     @GetMapping("/{id}/request-token")
     @EntityMustExists(classType = AppUser.class)
-    private void getToken(
+    private Object getToken(
             HttpServletRequest request,
             HttpServletResponse response
     ) throws IOException {
@@ -46,22 +60,26 @@ public class RequestTokenController {
                 JWTVerifier jwtVerifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = jwtVerifier.verify(refreshToken);
                 String username = decodedJWT.getSubject();
-                AppUser appUser = this.userRepository.findByUsername(username);
-                String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
 
-                String accessToken = JWT.create()
+                final AppUser appUser = this.userRepository.findByUsername(username);
+                final String accessToken = JWT.create()
                         .withSubject(appUser.getUsername())
                         .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 10000))
                         .withIssuer(request.getRequestURI())
                         .sign(algorithm);
 
-                response.setHeader("accessToken", accessToken);
-                response.setHeader("refreshToken", refreshToken);
+                final EnumMap<ResponseDataType, String> enumMap = new EnumMap<>(ResponseDataType.class);
+                enumMap.put(ResponseDataType.REFRESH_TOKEN, refreshToken);
+                enumMap.put(ResponseDataType.ACCESS_TOKEN, accessToken);
+
+                this.responseService.setEnumData(enumMap);
             } catch (Throwable throwable) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
             }
         } else {
             throw new RefreshTokenMissingException();
         }
+
+        return this.responseService;
     }
 }
