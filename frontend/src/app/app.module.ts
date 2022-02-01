@@ -13,7 +13,7 @@ import {UserService} from "./services/user.service";
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
         BrowserModule,
