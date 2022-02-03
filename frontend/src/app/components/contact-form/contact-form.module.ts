@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatInputModule} from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from '@angular/material/select';
 
 import { SharedModule } from "../../shared/shared.module";
-import {ContactFormComponent} from "./contact-form.component";
+import { ContactFormComponent } from "./contact-form.component";
 
 @NgModule({
   declarations: [
@@ -11,8 +12,9 @@ import {ContactFormComponent} from "./contact-form.component";
   ],
   imports: [
     SharedModule,
+    MatInputModule,
     MatFormFieldModule,
-    MatInputModule
+    MatSelectModule
   ],
   exports: [ContactFormComponent]
 })
