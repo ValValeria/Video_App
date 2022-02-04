@@ -14,7 +14,7 @@
       </mat-form-field>
     </div>
     <div class="col-12">
-      <button mat-raised-button color="primary">Submit</button>
+      <button mat-raised-button color="primary" [disabled]="formGroup.invalid">Submit</button>
     </div>
   </form>
 </div>

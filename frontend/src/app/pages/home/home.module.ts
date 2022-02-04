@@ -12,6 +12,11 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [HomeComponent],
-  imports: [RouterModule.forChild(routes), SharedModule, SectionLayoutModule, ContactFormModule]
+  imports: [
+    RouterModule.forChild(routes),
+    SharedModule,
+    SectionLayoutModule,
+    ContactFormModule
+  ]
 })
 export class HomeModule{}
