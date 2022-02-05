@@ -26,11 +26,11 @@ public class Video {
     @Size(min=10, max=400)
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     private AppUser user;
 
-    @OneToMany(targetEntity = Comment.class, mappedBy = "video")
+    @OneToMany(targetEntity = Comment.class, mappedBy = "video", fetch = FetchType.LAZY)
     private List<Comment> commentList;
 
     public AppUser getUser() {

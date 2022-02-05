@@ -3,8 +3,10 @@ package com.example.rozetka_app.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -24,22 +26,21 @@ public class AppUser {
     @Column
     @Size(min = 10, max = 20)
     @NotNull
+    @JsonIgnore
     private String password;
 
     @Column(columnDefinition = "enum(\"user\", \"admin\") default \"user\"")
+    @JsonIgnore
     private String role;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(targetEntity = Video.class, mappedBy = "user")
-    private List<Video> videoList;
+    @OneToMany(targetEntity = Video.class, mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Video> videoList = new ArrayList<>();
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(targetEntity = Comment.class, mappedBy = "user")
-    private List<Comment> commentList;
+    @OneToMany(targetEntity = Comment.class, mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Comment> commentList = new ArrayList<>();
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(targetEntity = Like.class, mappedBy = "user")
-    private List<Like> likeList;
+    @OneToMany(targetEntity = Like.class, mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Like> likeList = new ArrayList<>();
 
     public Long getId() {
         return id;

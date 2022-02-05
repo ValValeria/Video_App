@@ -15,8 +15,8 @@ const routes: Routes = [
   ],
   imports: [
     SharedModule,
-    RouterModule.forChild(routes),
-    SectionLayoutModule
+    SectionLayoutModule,
+    RouterModule.forChild(routes)
   ]
 })
 export class VideosModule { }

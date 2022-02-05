@@ -67,13 +67,10 @@ public class VideoController {
     public Object getVideos(Pageable pageable) {
         final HashMap<String, Object> hashMap = new HashMap<>();
         final Page<Video> videosPage = videoRepository.findAll(pageable);
+        final List<Video> videoList = videosPage.get().collect(Collectors.toList());
+        videoList.forEach(v -> v.getUser().getVideoList().clear());
 
-        if(videosPage.hasContent()){
-            hashMap.put("results", videosPage.get().collect(Collectors.toList()));
-        } else{
-            hashMap.put("results", Collections.emptyList());
-        }
-
+        hashMap.put("results", videosPage.get().collect(Collectors.toList()));
         hashMap.put("page", videosPage.getTotalPages());
         hashMap.put("items", videosPage.getTotalElements());
 
