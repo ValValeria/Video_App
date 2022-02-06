@@ -1,57 +1,67 @@
 package com.example.rozetka_app.controllers.api;
 
-import com.example.rozetka_app.annotations.AdminOnly;
-import com.example.rozetka_app.annotations.EntityMustExists;
-import com.example.rozetka_app.annotations.SecurityPermissionsContext;
 import com.example.rozetka_app.models.AppUser;
-import com.example.rozetka_app.repositories.LikeRepository;
 import com.example.rozetka_app.repositories.UserRepository;
-import com.example.rozetka_app.repositories.VideoRepository;
+import com.example.rozetka_app.services.ResponseDataType;
 import com.example.rozetka_app.services.ResponseService;
-import com.example.rozetka_app.statuscodes.DefinedErrors;
-import com.example.rozetka_app.statuscodes.DefinedStatusCodes;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Map;
+import java.util.EnumMap;
 
 @Controller
-@RequestMapping(path = "/api/user")
+@RequestMapping(path = "/api")
 public class UserController {
     private final UserRepository userRepository;
-    private final VideoRepository videoRepository;
     private final ResponseService<Object> responseService;
-    private final LikeRepository likeRepository;
 
     @Autowired
     public UserController(
         UserRepository userRepository,
-        VideoRepository videoRepository,
-        ResponseService<Object> responseService,
-        LikeRepository likeRepository
+        ResponseService<Object> responseService
     ) {
         this.userRepository = userRepository;
-        this.videoRepository = videoRepository;
         this.responseService = responseService;
-        this.likeRepository = likeRepository;
     }
 
-    @GetMapping("")
+    @GetMapping("users")
     private ResponseService<Object> getUsersList(
             @RequestParam Integer page,
             @RequestParam Integer size
     ) {
         Page<AppUser> users = this.userRepository.findAll(PageRequest.of(page, size));
-        this.responseService.setData(
-                Map.of(
-                        "all_pages", users.getTotalPages(),
-                        "results", users.get().toArray()
-                )
-        );
+
+        EnumMap<ResponseDataType, Object> enumMap = new EnumMap<>(ResponseDataType.class);
+        enumMap.put(ResponseDataType.RESULTS, users.getContent());
+        enumMap.put(ResponseDataType.ALL_PAGES, users.getTotalPages());
+
+        this.responseService.setEnumData(enumMap);
+
+        return this.responseService;
+    }
+
+    @GetMapping("likes")
+    @PreAuthorize("isAuthenticated()")
+    private ResponseService<Object> getUserLikes(
+            @RequestParam Integer page,
+            @RequestParam Integer size
+    ) {
+        SecurityContext securityContextHolder = SecurityContextHolder.getContext();
+        String userName = securityContextHolder.getAuthentication().getName();
+        AppUser user = this.userRepository.findByUsername(userName);
+
+        EnumMap<ResponseDataType, Object> enumMap = new EnumMap<>(ResponseDataType.class);
+        enumMap.put(ResponseDataType.RESULTS, user.getLikes());
+
+        this.responseService.setEnumData(enumMap);
 
         return this.responseService;
     }

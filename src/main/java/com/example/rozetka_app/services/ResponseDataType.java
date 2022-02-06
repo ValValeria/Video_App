@@ -4,5 +4,7 @@ public enum ResponseDataType {
     RESULTS,
     RESULT,
     ACCESS_TOKEN,
-    REFRESH_TOKEN
+    REFRESH_TOKEN,
+    ALL_PAGES,
+    ITEMS
 }

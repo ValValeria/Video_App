@@ -69,7 +69,7 @@ public class ResponseService<T> {
         this.errors = new String[]{};
 
         if(data != null){
-            this.data.clear();
+            this.data = new HashMap<>();
         }
     }
 

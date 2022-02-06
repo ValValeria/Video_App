@@ -49,13 +49,13 @@ public class CommentController {
 
         if(optionalVideo.isPresent()){
             Video video = optionalVideo.get();
-            List<Comment> commentList = Collections.unmodifiableList(video.getCommentList());
+            List<Comment> commentList = Collections.unmodifiableList(video.getComments());
 
             for(Comment comment : commentList){
                 this.commentRepository.deleteById(comment.getId());
             }
 
-            video.getCommentList().clear();
+            video.getComments().clear();
 
             this.videoRepository.deleteVideoById(video.getId());
             this.videoRepository.save(video);

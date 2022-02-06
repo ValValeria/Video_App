@@ -43,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable();
 
         httpSecurity.authorizeRequests()
-                .antMatchers("/public/**", "/api/token/**", "/api/signup/**", "/api/videos/**").permitAll()
+                .antMatchers("/public/**", "/api/token/**", "/api/signup/**").permitAll()
                 .anyRequest().authenticated();
 
         httpSecurity.addFilter(customAuthenticationFilter);

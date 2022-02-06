@@ -206,7 +206,7 @@ public class SecurityAspect {
 
                     break;
                 case AppSecurityUserRolesList.CAN_CREATE_COMMENT:
-                    return authUser.getCommentList().size() < ENTITY_COUNT_ALLOWED;
+                    return authUser.getComments().size() < ENTITY_COUNT_ALLOWED;
             }
         }
 

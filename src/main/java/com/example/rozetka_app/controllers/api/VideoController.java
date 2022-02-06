@@ -10,10 +10,16 @@ import com.example.rozetka_app.services.ResponseDataType;
 import com.example.rozetka_app.services.ResponseService;
 import com.example.rozetka_app.statuscodes.DefinedErrors;
 import com.example.rozetka_app.statuscodes.DefinedStatusCodes;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -55,29 +61,25 @@ public class VideoController {
     @GetMapping("/videos/{entityId}")
     @EntityMustExists(classType = Video.class)
     public Object getVideo(@PathVariable Long entityId){
-       Video video = videoRepository.findVideoById(entityId);
-       String key = ResponseDataType.RESULTS.name().toLowerCase(Locale.ROOT);
-
-       responseService.setData(Map.of(key, video));
-
-       return this.responseService;
+        return this.responseService;
     }
 
     @GetMapping("/videos")
-    public Object getVideos(Pageable pageable) {
-        final HashMap<String, Object> hashMap = new HashMap<>();
+    public Object getVideos(Pageable pageable) throws JsonProcessingException {
+        final EnumMap<ResponseDataType, Object> hashMap = new EnumMap<>(ResponseDataType.class);
         final Page<Video> videosPage = videoRepository.findAll(pageable);
-        final List<Video> videoList = videosPage.get().collect(Collectors.toList());
-        videoList.forEach(v -> v.getUser().getVideoList().clear());
+        final List<Video> videoList = videosPage.toList();
 
-        hashMap.put("results", videosPage.get().collect(Collectors.toList()));
-        hashMap.put("page", videosPage.getTotalPages());
-        hashMap.put("items", videosPage.getTotalElements());
+        hashMap.put(ResponseDataType.ALL_PAGES, videosPage.getTotalPages());
+        hashMap.put(ResponseDataType.RESULTS, videoList);
 
         this.responseService.setStatus("ok");
-        this.responseService.setData(hashMap);
+        this.responseService.setEnumData(hashMap);
 
-        return this.responseService;
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.findAndRegisterModules();
+
+        return objectMapper.writeValueAsString(this.responseService);
     }
 
     @PutMapping("/videos")
@@ -98,7 +100,8 @@ public class VideoController {
 
             Files.createFile(filePath);
 
-            try(InputStream inputStream = videoFile.getInputStream();
+            try(
+                InputStream inputStream = videoFile.getInputStream();
                 OutputStream outputStream = Files.newOutputStream(filePath)
             ){
                 int ch;

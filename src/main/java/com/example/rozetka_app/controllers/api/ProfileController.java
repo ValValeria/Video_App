@@ -51,7 +51,7 @@ public class ProfileController {
 
         Map<String, Object> objectMap = new java.util.HashMap<>();
         objectMap.put("user", this.userRepository.findUserById(entityId));
-        objectMap.put("video", user.getVideoList());
+        objectMap.put("video", user.getVideos());
 
         this.responseService.setData(objectMap);
 

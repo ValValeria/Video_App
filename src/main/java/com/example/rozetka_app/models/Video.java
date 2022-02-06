@@ -1,5 +1,7 @@
 package com.example.rozetka_app.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -26,12 +28,13 @@ public class Video {
     @Size(min=10, max=400)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "author_id", referencedColumnName = "id")
+    @JsonIgnore
     private AppUser user;
 
     @OneToMany(targetEntity = Comment.class, mappedBy = "video", fetch = FetchType.LAZY)
-    private List<Comment> commentList;
+    private List<Comment> comments;
 
     public AppUser getUser() {
         return user;
@@ -81,11 +84,19 @@ public class Video {
         this.description = description;
     }
 
-    public List<Comment> getCommentList() {
-        return commentList;
+    public List<Comment> getComments() {
+        return comments;
     }
 
-    public void setCommentList(List<Comment> commentList) {
-        this.commentList = commentList;
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public BaseUser getAuthor() {
+        BaseUser baseUser = new BaseUser();
+        baseUser.setId(this.user.getId());
+        baseUser.setUsername(this.user.getUsername());
+
+        return baseUser;
     }
 }
