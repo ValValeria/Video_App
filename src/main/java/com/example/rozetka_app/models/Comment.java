@@ -1,5 +1,7 @@
 package com.example.rozetka_app.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -22,6 +24,7 @@ public class Comment {
 
     @ManyToOne(targetEntity = AppUser.class)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonIgnore
     private AppUser user;
 
     public Long getId() {
@@ -62,5 +65,13 @@ public class Comment {
 
     public void setUser(AppUser user) {
         this.user = user;
+    }
+
+    public BaseUser getAuthor() {
+        BaseUser baseUser = new BaseUser();
+        baseUser.setId(this.user.getId());
+        baseUser.setUsername(this.user.getUsername());
+
+        return baseUser;
     }
 }

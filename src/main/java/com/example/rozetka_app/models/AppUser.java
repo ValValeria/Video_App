@@ -22,6 +22,30 @@ public class AppUser extends BaseUser {
     @OneToMany(targetEntity = Like.class, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Like> likes;
 
+    @Column
+    @Size(min = 10, max = 20)
+    @NotNull
+    protected String password;
+
+    @Column(columnDefinition = "enum(\"user\", \"admin\") default \"user\"")
+    protected String role;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public void addToVideoList(Video video){
         this.videos.add(video);
     }

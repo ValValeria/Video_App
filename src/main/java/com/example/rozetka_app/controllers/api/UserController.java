@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.EnumMap;
 
 @Controller
-@RequestMapping(path = "/api")
+@RequestMapping(path = "/api/user")
 public class UserController {
     private final UserRepository userRepository;
     private final ResponseService<Object> responseService;
@@ -32,22 +32,6 @@ public class UserController {
         this.responseService = responseService;
     }
 
-    @GetMapping("users")
-    private ResponseService<Object> getUsersList(
-            @RequestParam Integer page,
-            @RequestParam Integer size
-    ) {
-        Page<AppUser> users = this.userRepository.findAll(PageRequest.of(page, size));
-
-        EnumMap<ResponseDataType, Object> enumMap = new EnumMap<>(ResponseDataType.class);
-        enumMap.put(ResponseDataType.RESULTS, users.getContent());
-        enumMap.put(ResponseDataType.ALL_PAGES, users.getTotalPages());
-
-        this.responseService.setEnumData(enumMap);
-
-        return this.responseService;
-    }
-
     @GetMapping("likes")
     @PreAuthorize("isAuthenticated()")
     private ResponseService<Object> getUserLikes(
@@ -56,6 +40,7 @@ public class UserController {
     ) {
         SecurityContext securityContextHolder = SecurityContextHolder.getContext();
         String userName = securityContextHolder.getAuthentication().getName();
+
         AppUser user = this.userRepository.findByUsername(userName);
 
         EnumMap<ResponseDataType, Object> enumMap = new EnumMap<>(ResponseDataType.class);

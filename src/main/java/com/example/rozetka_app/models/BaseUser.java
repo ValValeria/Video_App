@@ -18,14 +18,6 @@ public class BaseUser {
     @NotNull
     protected String username;
 
-    @Column
-    @Size(min = 10, max = 20)
-    @NotNull
-    protected String password;
-
-    @Column(columnDefinition = "enum(\"user\", \"admin\") default \"user\"")
-    protected String role;
-
     public Long getId() {
         return id;
     }
@@ -40,23 +32,5 @@ public class BaseUser {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    @JsonIgnore
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @JsonIgnore
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 }

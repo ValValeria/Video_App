@@ -10,6 +10,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
+import com.example.rozetka_app.models.BaseUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -45,6 +46,23 @@ public class UserRepository extends BaseRepository<AppUser> {
         }
     }
 
+    @Transactional
+    public Page<BaseUser> findUsersWithHiddenProps(PageRequest pageRequest) {
+        int page = pageRequest.getPageNumber();
+        int total = pageRequest.getPageSize();
+
+        Query query = this.entityManager.createQuery("from User", BaseUser.class);
+        query.setMaxResults(total);
+        query.setFirstResult(page * total);
+
+        long size = Long.parseLong(this.entityManager
+                .createQuery("select count(*) from User")
+                .getSingleResult().toString());
+
+        return (Page<BaseUser>) new PageImpl(query.getResultList(), pageRequest, size);
+    }
+
+    @Transactional
     public AppUser findUserById(Long id){
         return this.entityManager.find(AppUser.class, id);
     }
