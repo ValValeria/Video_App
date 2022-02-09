@@ -5,8 +5,6 @@ import com.example.rozetka_app.repositories.UserRepository;
 import com.example.rozetka_app.services.ResponseDataType;
 import com.example.rozetka_app.services.ResponseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,10 +32,7 @@ public class UserController {
 
     @GetMapping("likes")
     @PreAuthorize("isAuthenticated()")
-    private ResponseService<Object> getUserLikes(
-            @RequestParam Integer page,
-            @RequestParam Integer size
-    ) {
+    private ResponseService<Object> getUserLikes() {
         SecurityContext securityContextHolder = SecurityContextHolder.getContext();
         String userName = securityContextHolder.getAuthentication().getName();
 
