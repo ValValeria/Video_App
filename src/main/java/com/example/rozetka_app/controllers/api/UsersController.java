@@ -1,5 +1,6 @@
 package com.example.rozetka_app.controllers.api;
 
+import com.example.rozetka_app.annotations.AdminOnly;
 import com.example.rozetka_app.models.BaseUser;
 import com.example.rozetka_app.repositories.UserRepository;
 import com.example.rozetka_app.services.ResponseDataType;
@@ -30,6 +31,7 @@ public class UsersController {
     }
 
     @GetMapping("users")
+    @AdminOnly
     private String getUsersList(
             @RequestParam Integer page,
             @RequestParam Integer size
