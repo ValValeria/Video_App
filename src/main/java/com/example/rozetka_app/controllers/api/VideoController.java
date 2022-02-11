@@ -11,24 +11,15 @@ import com.example.rozetka_app.services.ResponseService;
 import com.example.rozetka_app.statuscodes.DefinedErrors;
 import com.example.rozetka_app.statuscodes.DefinedStatusCodes;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONObject;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,7 +30,6 @@ import java.nio.file.Paths;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/api")
@@ -61,6 +51,11 @@ public class VideoController {
     @GetMapping("/videos/{entityId}")
     @EntityMustExists(classType = Video.class)
     public Object getVideo(@PathVariable Long entityId){
+        EnumMap<ResponseDataType, Object> enumMap = new EnumMap<>(ResponseDataType.class);
+        enumMap.put(ResponseDataType.RESULT, this.videoRepository.findVideoById(entityId));
+
+        this.responseService.setEnumData(enumMap);
+
         return this.responseService;
     }
 

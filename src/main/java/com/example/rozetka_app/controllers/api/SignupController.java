@@ -84,33 +84,5 @@ public class SignupController {
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);
-
-        this.getAccessToken(request, user);
-    }
-
-    private void getAccessToken(
-            HttpServletRequest request,
-            com.example.rozetka_app.security.AppUser user
-    ) {
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-        String accessToken = JWT.create()
-                .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 10000))
-                .withIssuer(request.getRequestURI())
-                .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-                .sign(algorithm);
-
-        String refreshAccessToken = JWT.create()
-                .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 50 * 60 * 10000))
-                .withIssuer(request.getRequestURI())
-                .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-                .sign(algorithm);
-
-        EnumMap<ResponseDataType, Object> dataHashMap = new EnumMap<ResponseDataType, Object>(ResponseDataType.class);
-        dataHashMap.put(ResponseDataType.ACCESS_TOKEN, accessToken);
-        dataHashMap.put(ResponseDataType.REFRESH_TOKEN, refreshAccessToken);
-
-        this.responseService.setEnumData(dataHashMap);
     }
 }

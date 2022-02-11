@@ -1,41 +1,31 @@
 package com.example.rozetka_app.controllers.api;
 
-import com.example.rozetka_app.annotations.AdminOnly;
 import com.example.rozetka_app.models.BaseUser;
 import com.example.rozetka_app.repositories.UserRepository;
 import com.example.rozetka_app.services.ResponseDataType;
 import com.example.rozetka_app.services.ResponseService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.inject.Inject;
 import java.util.EnumMap;
 
-@RestController("/api")
+@Controller("/api")
 public class UsersController {
-    private final UserRepository userRepository;
-    private final ResponseService<Object> responseService;
+    private UserRepository userRepository;
+    private ResponseService<Object> responseService;
 
-    @Autowired
-    public UsersController(
-            UserRepository userRepository,
-            ResponseService<Object> responseService
-    ) {
-        this.userRepository = userRepository;
-        this.responseService = responseService;
-    }
-
-    @GetMapping("users")
-    @AdminOnly
-    private String getUsersList(
+    @GetMapping("/users")
+    @ResponseBody
+    private Object getUsersList(
             @RequestParam Integer page,
             @RequestParam Integer size
-    ) throws JsonProcessingException {
+    ) {
         Page<BaseUser> users = this.userRepository.findUsersWithHiddenProps(PageRequest.of(page, size));
 
         EnumMap<ResponseDataType, Object> enumMap = new EnumMap<>(ResponseDataType.class);
@@ -44,6 +34,16 @@ public class UsersController {
 
         this.responseService.setEnumData(enumMap);
 
-        return new ObjectMapper().writeValueAsString(this.responseService);
+        return this.responseService;
+    }
+
+    @Inject
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Inject
+    public void setResponseService(ResponseService<Object> responseService) {
+        this.responseService = responseService;
     }
 }

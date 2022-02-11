@@ -36,19 +36,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(this.authenticationManager());
-        customAuthenticationFilter.setFilterProcessesUrl("/api/login");
-
         httpSecurity.csrf()
                 .disable();
 
         httpSecurity.authorizeRequests()
-                .antMatchers("/public/**", "/api/token/**", "/api/signup/**").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().permitAll();
 
-        httpSecurity.addFilter(customAuthenticationFilter);
-
-        httpSecurity.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilter(new CustomAuthenticationFilter());
     }
 
     @Override
