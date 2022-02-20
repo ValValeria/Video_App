@@ -4,7 +4,7 @@ import {auditTime} from "rxjs";
 
 import {MatDrawer} from "@angular/material/sidenav";
 
-import {menuClick$} from "./components/subjects/header-component.subject";
+import {menuClick$} from "./subjects/header-component.subject";
 
 @Component({
   selector: 'app-root',

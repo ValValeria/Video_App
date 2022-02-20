@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 
-import {menuClick$} from "../subjects/header-component.subject";
+import {menuClick$} from "../../subjects/header-component.subject";
 import {UserService} from "../../services/user.service";
 
 @Component({

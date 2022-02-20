@@ -1,28 +1,22 @@
 package com.example.rozetka_app.aop;
 
-import com.example.rozetka_app.services.ResponseService;
-import com.example.rozetka_app.statuscodes.DefinedErrors;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import org.apache.tomcat.util.json.JSONParser;
-import org.aspectj.lang.annotation.Aspect;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.security.crypto.codec.Utf8;
-import org.springframework.stereotype.Component;
 import com.example.rozetka_app.annotations.EntityMustExists;
 import com.example.rozetka_app.models.AppUser;
 import com.example.rozetka_app.models.Video;
 import com.example.rozetka_app.repositories.CommentRepository;
 import com.example.rozetka_app.repositories.UserRepository;
 import com.example.rozetka_app.repositories.VideoRepository;
+import com.example.rozetka_app.services.ResponseService;
+import com.example.rozetka_app.statuscodes.DefinedErrors;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
@@ -39,7 +33,6 @@ public class EntityExistsAspect {
     private final UserRepository userRepository;
     private final VideoRepository videoRepository;
     private final ResponseService<Object> responseService;
-    private Logger logger = LoggerFactory.getLogger(EntityExistsAspect.class.getName());
     private boolean isAllowed = false;
 
     @Autowired

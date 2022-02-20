@@ -1,8 +1,10 @@
-import { NgModule } from '@angular/core';
-import { MatSnackBarModule } from "@angular/material/snack-bar";
+import {NgModule} from '@angular/core';
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
-import { SharedModule } from "../../shared/shared.module";
-import { ContactFormComponent } from "./contact-form.component";
+import {SharedModule} from "../../shared/shared.module";
+import {ContactFormComponent} from "./contact-form.component";
+import {InputTextModule} from 'primeng/inputtext';
+import {ToastModule} from 'primeng/toast';
 
 @NgModule({
   declarations: [
@@ -10,7 +12,9 @@ import { ContactFormComponent } from "./contact-form.component";
   ],
   imports: [
     SharedModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    InputTextModule,
+    ToastModule
   ],
   exports: [ContactFormComponent]
 })
