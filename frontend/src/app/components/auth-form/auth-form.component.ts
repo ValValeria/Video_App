@@ -3,6 +3,7 @@ import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} f
 import {HttpClient} from "@angular/common/http";
 import {UserService} from "../../services/user.service";
 import {IResponseType, ITokens} from "../../types/interfaces";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-auth-form',
@@ -17,9 +18,14 @@ export class AuthFormComponent implements OnChanges {
   constructor(
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
-    private userService: UserService
+    private userService: UserService,
+    private snackBar: MatSnackBar
   ) {
-    this.validators = [Validators.required, Validators.max(25), Validators.min(10)];
+    this.validators = [
+      Validators.required,
+      Validators.max(25),
+      Validators.min(10)
+    ];
 
     this.form = formBuilder.group({
         password: ['', Validators.compose(this.validators)],
@@ -33,7 +39,10 @@ export class AuthFormComponent implements OnChanges {
     if (value === true) {
       this.form.removeControl("email");
     } else if(!this.form.contains("email")) {
-      const control = this.formBuilder.control("", Validators.compose([...this.validators, Validators.email]))
+      const control = this.formBuilder.control(
+        "",
+        Validators.compose([...this.validators, Validators.email])
+      );
       this.form.addControl("email", control);
     }
   }
@@ -41,16 +50,14 @@ export class AuthFormComponent implements OnChanges {
   async submit(): Promise<void> {
     if(this.form.valid) {
       this.httpClient.post<IResponseType<ITokens>>('/api/signup', this.form.value).subscribe(v => {
-        const user = this.userService.user;
-
         if (v.status === "ok") {
-          const refreshToken = v.data.refreshToken;
-          const accessToken = v.data.accessToken;
-
-          this.userService.refreshToken = refreshToken;
-          this.userService.accessToken = accessToken;
+          this.userService.user.isAuth = true;
+        } else {
+          this.snackBar.open("Some errors have occurred", "Close");
         }
       });
+    } else {
+      this.snackBar.open("Please, check the validity of form", "Close");
     }
   }
 }
