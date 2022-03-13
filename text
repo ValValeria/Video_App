@@ -1,0 +1,28 @@
+1)The following list shows the most important Maven lifecycle phases:
+
+validate – checks the correctness of the project
+compile – compiles the provided source code into binary artifacts
+test – executes unit tests
+package – packages compiled code into an archive file
+integration-test – executes additional tests, which require the packaging
+verify – checks if the package is valid
+install – installs the package file into the local Maven repository
+deploy – deploys the package file to a remote server or repository
+
+mvn archetype:generate
+  -DgroupId=org.baeldung
+  -DartifactId=org.baeldung.java
+  -DarchetypeArtifactId=maven-archetype-quickstart
+  -DinteractiveMode=false
+
+2) Classpath
+javac -d classes -cp src src/com/max/fail/Max.java
+
+где com/max/fail - название пакета
+    src - папка, где лежит
+java
+
+3) Jar
+
+jar -cf JarName.jar com
+где com - папка, тоесть начало пакета

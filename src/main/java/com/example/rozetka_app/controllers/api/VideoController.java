@@ -39,10 +39,11 @@ public class VideoController {
     private final UserRepository userRepository;
 
     @Autowired
-    public VideoController(VideoRepository videoRepository,
-                           ResponseService<Object> responseService,
-                           UserRepository userRepository
-                           ){
+    public VideoController(
+            VideoRepository videoRepository,
+            ResponseService<Object> responseService,
+            UserRepository userRepository
+    ) {
         this.videoRepository = videoRepository;
         this.responseService = responseService;
         this.userRepository = userRepository;
@@ -50,7 +51,7 @@ public class VideoController {
 
     @GetMapping("/videos/{entityId}")
     @EntityMustExists(classType = Video.class)
-    public Object getVideo(@PathVariable Long entityId){
+    public Object getVideo(@PathVariable Long entityId) {
         EnumMap<ResponseDataType, Object> enumMap = new EnumMap<>(ResponseDataType.class);
         enumMap.put(ResponseDataType.RESULT, this.videoRepository.findVideoById(entityId));
 
@@ -85,23 +86,23 @@ public class VideoController {
             BindingResult bindingResult,
             HttpServletRequest request
     ) throws IOException {
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             this.responseService.addFullErrorsInfo(DefinedErrors.INPUT_FIELD_ERRORS.getAllInfo());
         } else {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss");
             String fileName = dateFormat.format(new Date()) + videoFile.getOriginalFilename();
             String path = String.format("/static/uploads/%s", fileName);
-            Path filePath = Paths.get("src\\main\\resources\\static\\uploads\\"+fileName);
+            Path filePath = Paths.get("src\\main\\resources\\static\\uploads\\" + fileName);
 
             Files.createFile(filePath);
 
-            try(
-                InputStream inputStream = videoFile.getInputStream();
-                OutputStream outputStream = Files.newOutputStream(filePath)
-            ){
+            try (
+                    InputStream inputStream = videoFile.getInputStream();
+                    OutputStream outputStream = Files.newOutputStream(filePath)
+            ) {
                 int ch;
 
-                while((ch=inputStream.read())!=-1){
+                while ((ch = inputStream.read()) != -1) {
                     outputStream.write(ch);
                 }
             }
@@ -109,7 +110,7 @@ public class VideoController {
             Principal principal = request.getUserPrincipal();
             AppUser user = userRepository.findByUsername(principal.getName());
 
-            if(user != null){
+            if (user != null) {
                 video.setPath(path);
                 video.setUser(user);
 
@@ -126,7 +127,7 @@ public class VideoController {
 
     @DeleteMapping("/videos/{id}")
     @AdminOnly
-    public String deleteVideo(@PathVariable Long id){
+    public String deleteVideo(@PathVariable Long id) {
         this.videoRepository.deleteVideoById(id);
         this.responseService.addFullStatusInfo(DefinedStatusCodes.STATUS_OK.getAllInfo());
 

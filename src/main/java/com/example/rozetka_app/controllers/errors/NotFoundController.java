@@ -18,7 +18,7 @@ public class NotFoundController {
     }
 
     @ExceptionHandler(RefreshTokenMissingException.class)
-    private Object handleError(Throwable throwable) {
+    private Object handleError() {
        return this.responseService;
     }
 }

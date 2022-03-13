@@ -1,8 +1,8 @@
 package com.example.rozetka_app.controllers.api;
 
 import com.example.rozetka_app.annotations.SecurityPermissionsContext;
-import com.example.rozetka_app.models.Comment;
 import com.example.rozetka_app.models.AppUser;
+import com.example.rozetka_app.models.Comment;
 import com.example.rozetka_app.models.Video;
 import com.example.rozetka_app.repositories.CommentRepository;
 import com.example.rozetka_app.repositories.UserRepository;
@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.example.rozetka_app.security.AppSecurityUserRolesList.CAN_CREATE_COMMENT;
-import static com.example.rozetka_app.security.AppSecurityUserRolesList.CAN_VIEW_PROFILE;
 
 @RestController
 @RequestMapping(path = "/api/comment", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -14,7 +14,9 @@ import com.example.rozetka_app.statuscodes.DefinedStatusCodes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.*;
+
 import static com.example.rozetka_app.security.AppSecurityUserRolesList.CAN_ADD_LIKES;
 import static com.example.rozetka_app.security.AppSecurityUserRolesList.CAN_VIEW_PROFILE;
 
@@ -33,11 +35,11 @@ public class ProfileController {
             VideoRepository videoRepository,
             ResponseService<Object> responseService,
             LikeRepository likeRepository
-    ){
-       this.userRepository = userRepository;
-       this.videoRepository = videoRepository;
-       this.responseService = responseService;
-       this.likeRepository = likeRepository;
+    ) {
+        this.userRepository = userRepository;
+        this.videoRepository = videoRepository;
+        this.responseService = responseService;
+        this.likeRepository = likeRepository;
     }
 
     @GetMapping("/{id}")
@@ -46,7 +48,7 @@ public class ProfileController {
             className = AppUser.class
     )
     @EntityMustExists(classType = AppUser.class)
-    private Object viewProfile(@PathVariable(name = "id") Long entityId){
+    private Object viewProfile(@PathVariable(name = "id") Long entityId) {
         AppUser user = this.userRepository.findUserById(entityId);
 
         Map<String, Object> objectMap = new java.util.HashMap<>();
@@ -65,11 +67,11 @@ public class ProfileController {
     )
     @EntityMustExists(classType = AppUser.class)
     private Object addToLikedVideo(@PathVariable(name = "id") Long entityId,
-                                   @PathVariable Long videoId){
+                                   @PathVariable Long videoId) {
         AppUser user = this.userRepository.findUserById(entityId);
         Optional<Video> optionalVideo = this.videoRepository.findById(videoId);
 
-        if(Objects.nonNull(user) && optionalVideo.isPresent()){
+        if (Objects.nonNull(user) && optionalVideo.isPresent()) {
             Video video = optionalVideo.get();
 
             user.addToVideoList(video);
@@ -92,7 +94,7 @@ public class ProfileController {
         Optional<Video> optionalVideo = this.videoRepository.findById(videoEntityId);
         AppUser appUser = this.userRepository.findUserById(entityId);
 
-        if(optionalVideo.isPresent() && Objects.nonNull(appUser)) {
+        if (optionalVideo.isPresent() && Objects.nonNull(appUser)) {
             Video video = optionalVideo.get();
             Like like = this.likeRepository.findLikeByUserIdEqualsAndVideoIdEquals(appUser.getId(), video.getId());
 

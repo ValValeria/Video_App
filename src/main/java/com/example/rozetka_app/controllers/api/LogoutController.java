@@ -23,6 +23,7 @@ public class LogoutController {
     @GetMapping(value = "/api/logout")
     private Object index(HttpServletRequest request) throws ServletException {
         request.logout();
+
         responseService.setStatus("ok");
 
         return this.responseService;
