@@ -40,7 +40,7 @@ export class ContactFormComponent {
 
     if (this.formGroup.valid) {
       this.httpClient.post("/api/letters", this.formGroup.value)
-        .subscribe(v => {
+        .subscribe(() => {
            this.snackBar.open("Your message has been sent", "Close");
         });
     }

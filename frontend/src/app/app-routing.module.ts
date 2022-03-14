@@ -21,7 +21,6 @@ const routes: Routes = [
   {
    path: 'profile/:id',
    loadChildren: () => import("./pages/profile/profile.module").then(v => v.ProfileModule),
-   canLoad: [AuthGuard],
    pathMatch: "full"
   },
   {

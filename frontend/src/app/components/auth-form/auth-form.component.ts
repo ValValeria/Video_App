@@ -1,9 +1,11 @@
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {Router} from "@angular/router";
+
 import {UserService} from "../../services/user.service";
 import {IResponseType, ITokens} from "../../types/interfaces";
-import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-auth-form',
@@ -19,7 +21,8 @@ export class AuthFormComponent implements OnChanges {
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
     private userService: UserService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {
     this.validators = [
       Validators.required,
@@ -38,7 +41,8 @@ export class AuthFormComponent implements OnChanges {
 
     if (value === true) {
       this.form.removeControl("email");
-    } else if(!this.form.contains("email")) {
+    }
+    else if(!this.form.contains("email")) {
       const control = this.formBuilder.control(
         "",
         Validators.compose([...this.validators, Validators.email])
@@ -49,14 +53,17 @@ export class AuthFormComponent implements OnChanges {
 
   async submit(): Promise<void> {
     if(this.form.valid) {
-      this.httpClient.post<IResponseType<ITokens>>('/api/signup', this.form.value).subscribe(v => {
+      this.httpClient.post<IResponseType<ITokens>>('/api/auth/sign-up', this.form.value).subscribe(v => {
         if (v.status === "ok") {
           this.userService.user.isAuth = true;
+
+          this.router.navigateByUrl("/");
         } else {
           this.snackBar.open("Some errors have occurred", "Close");
         }
       });
-    } else {
+    }
+    else {
       this.snackBar.open("Please, check the validity of form", "Close");
     }
   }

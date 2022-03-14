@@ -18,7 +18,7 @@ export class NavigationDrawerComponent implements OnInit {
   ) {
     this.paths = [
       {path: '', title: 'Home'},
-      {path: 'auth', title: 'Authenticate'},
+      {path: 'auth', title: 'Authenticate', onlyAuth: false},
       {path: 'videos', title: 'Videos', onlyAuth: true},
       {path: 'contacts', title: 'Contact us'}
     ];
