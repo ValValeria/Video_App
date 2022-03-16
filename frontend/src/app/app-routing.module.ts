@@ -14,7 +14,7 @@ const routes: Routes = [
    pathMatch: 'full'
   },
   {
-   path: 'videos',
+   path: 'videos/:userId',
    loadChildren: () => import("./pages/videos/videos.module").then(v => v.VideosModule),
    pathMatch: "full"
   },
@@ -40,7 +40,7 @@ const routes: Routes = [
     pathMatch: "full"
   },
   {
-    path: 'videos/:id',
+    path: 'video/:id',
     loadChildren: () => import("./pages/video/video.module").then(v => v.VideoModule),
     canLoad: [AuthGuard],
     pathMatch: "full"

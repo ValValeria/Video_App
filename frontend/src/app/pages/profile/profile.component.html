@@ -2,12 +2,12 @@
                     cssClass="profile">
  <div class="profile__layout">
    <div class="profile__user-img">
-     <mat-card class="w-100">
-
+     <mat-card class="w-100 h-100">
+       <img src="/assets/profile.svg"/>
      </mat-card>
    </div>
    <div class="profile__user-info">
-     <mat-card class="w-100 text-left">
+     <mat-card class="w-100 text-left h-100">
        <mat-card-title class="mb-2">
          User info
        </mat-card-title>
@@ -22,25 +22,25 @@
      </mat-card>
    </div>
    <div class="profile__actions w-100 text-left">
-     <div class="w-100">
-       <mat-card>
+     <div class="w-100 h-100">
+       <mat-card class="h-100">
          <mat-card-subtitle>
            Actions
          </mat-card-subtitle>
          <mat-card-content>
            <div class="grid-auto">
-             <button color="accent" mat-flat-button>View videos</button>
-             <button color="warn" mat-flat-button>Delete the profile</button>
-             <button color="primary" mat-flat-button>Change the user's info</button>
+             <button color="accent" mat-flat-button (click)="videosByUser()">View videos</button>
+             <button color="warn" mat-flat-button (click)="deleteUserProfile()">Delete the profile</button>
+             <button color="primary" mat-flat-button (click)="changeUserInfo()">Change the user's info</button>
            </div>
          </mat-card-content>
        </mat-card>
      </div>
    </div>
    <div class="profile__videos-count w-100">
-     <mat-card>
+     <mat-card class="h-100">
        <mat-card-title class="mat-h1">
-         24
+         {{totalVideoCount}}
        </mat-card-title>
        <mat-card-title>
          The count of videos

@@ -47,7 +47,7 @@ public class UserRepository extends BaseRepository<AppUser> {
     }
 
     @Transactional
-    public Page<BaseUser> findUsersWithHiddenProps(PageRequest pageRequest) {
+    public Page<Object> findUsersWithHiddenProps(PageRequest pageRequest) {
         int page = pageRequest.getPageNumber();
         int total = pageRequest.getPageSize();
 

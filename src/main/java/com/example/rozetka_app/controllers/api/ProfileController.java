@@ -8,6 +8,7 @@ import com.example.rozetka_app.models.Video;
 import com.example.rozetka_app.repositories.LikeRepository;
 import com.example.rozetka_app.repositories.UserRepository;
 import com.example.rozetka_app.repositories.VideoRepository;
+import com.example.rozetka_app.services.ResponseDataType;
 import com.example.rozetka_app.services.ResponseService;
 import com.example.rozetka_app.statuscodes.DefinedErrors;
 import com.example.rozetka_app.statuscodes.DefinedStatusCodes;
@@ -17,8 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-import static com.example.rozetka_app.security.AppSecurityUserRolesList.CAN_ADD_LIKES;
-import static com.example.rozetka_app.security.AppSecurityUserRolesList.CAN_VIEW_PROFILE;
+import static com.example.rozetka_app.security.AppSecurityUserRolesList.*;
 
 @RestController
 @RequestMapping(value = "/api/profile")
@@ -42,6 +42,23 @@ public class ProfileController {
         this.likeRepository = likeRepository;
     }
 
+    @GetMapping("/{id}/get-videos-count")
+    @SecurityPermissionsContext(
+            permission = CAN_VIEW_PROFILE,
+            className = AppUser.class
+    )
+    @EntityMustExists(classType = AppUser.class)
+    private Object getTotalVideosCount(@PathVariable(name = "id") Long entityId) {
+        Long videoCount = this.videoRepository.count();
+
+        EnumMap<ResponseDataType, Object> enumMap = new EnumMap<>(ResponseDataType.class);
+        enumMap.put(ResponseDataType.RESULTS, videoCount);
+
+        this.responseService.setEnumData(enumMap);
+
+        return this.responseService;
+    }
+
     @GetMapping("/{id}")
     @SecurityPermissionsContext(
             permission = CAN_VIEW_PROFILE,
@@ -56,6 +73,19 @@ public class ProfileController {
         objectMap.put("video", user.getVideos());
 
         this.responseService.setData(objectMap);
+
+        return this.responseService;
+    }
+
+    @DeleteMapping("/{id}")
+    @SecurityPermissionsContext(
+            permission = CAN_DELETE_PROFILE,
+            className = AppUser.class
+    )
+    @EntityMustExists(classType = AppUser.class)
+    private Object deleteProfile(@PathVariable(name = "id") Long entityId) {
+        this.userRepository.deleteById(entityId);
+        this.responseService.setStatus("ok");
 
         return this.responseService;
     }

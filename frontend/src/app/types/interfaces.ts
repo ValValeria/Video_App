@@ -1,3 +1,5 @@
+import {Roles} from "./roles";
+
 export interface IVideo {
   id: number;
   path: string;
@@ -26,4 +28,5 @@ export interface IUser{
   username: string;
   password: string;
   id: number;
+  role: Roles;
 }
