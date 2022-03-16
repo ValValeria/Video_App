@@ -1,27 +1,31 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 
 import {AuthGuard} from "./guards/auth.guard";
 import {AdminOnlyGuard} from "./guards/admin-only.guard";
+import {ProfileGuard} from "./guards/profile.guard";
 
 const routes: Routes = [
-  {path: '',
-   loadChildren: () => import("./pages/home/home.module").then(v => v.HomeModule),
-   pathMatch: 'full'
-  },
-  {path: 'auth',
-   loadChildren: () => import("./pages/auth/auth.module").then(v => v.AuthModule),
-   pathMatch: 'full'
+  {
+    path: '',
+    loadChildren: () => import("./pages/home/home.module").then(v => v.HomeModule),
+    pathMatch: 'full'
   },
   {
-   path: 'videos/:userId',
-   loadChildren: () => import("./pages/videos/videos.module").then(v => v.VideosModule),
-   pathMatch: "full"
+    path: 'auth',
+    loadChildren: () => import("./pages/auth/auth.module").then(v => v.AuthModule),
+    pathMatch: 'full'
   },
   {
-   path: 'profile/:id',
-   loadChildren: () => import("./pages/profile/profile.module").then(v => v.ProfileModule),
-   pathMatch: "full"
+    path: 'videos',
+    loadChildren: () => import("./pages/videos/videos.module").then(v => v.VideosModule),
+    pathMatch: "full"
+  },
+  {
+    path: 'profile/:id',
+    loadChildren: () => import("./pages/profile/profile.module").then(v => v.ProfileModule),
+    pathMatch: "full",
+    canLoad: [ProfileGuard]
   },
   {
     path: 'users',
@@ -58,4 +62,5 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

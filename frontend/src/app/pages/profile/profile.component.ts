@@ -1,13 +1,17 @@
 import {Component} from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
+import {HttpClient} from "@angular/common/http";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {MatSnackBar} from "@angular/material/snack-bar";
+
+import {Observable} from "rxjs";
+import {catchError, retry} from "rxjs/operators";
 
 import {IMultipleResponse, IResponseType, IUser} from "../../types/interfaces";
 import {User} from "../../models/user.model";
 import {UserService} from "../../services/user.service";
-import {HttpClient} from "@angular/common/http";
-import {retry} from "rxjs/operators";
-import {ActivatedRoute, Router} from "@angular/router";
 import {Roles} from "../../types/roles";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {EmptyResponse} from "../../types/classes";
 
 @Component({
   selector: 'app-profile',
@@ -17,13 +21,17 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 export class ProfileComponent {
   public totalVideoCount: number = 0;
   public user: IUser = new User();
+  public showEditControls: boolean = false;
+
+  public readonly form: FormGroup;
 
   constructor(
     private userService: UserService,
     private httpClient: HttpClient,
     private activatedRoute: ActivatedRoute,
     private matSnackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private formBuilder: FormBuilder
   ) {
     activatedRoute.paramMap.subscribe(v => {
        const id: number = parseInt(v.get('id') as string, 10);
@@ -35,6 +43,20 @@ export class ProfileComponent {
        } else if (userService.user.role === Roles.ADMIN) {
          this.loadUserById(id);
        }
+    });
+
+    this.form = formBuilder.group({
+      username: ["", Validators.compose([
+        Validators.min(10),
+        Validators.max(25),
+        Validators.required
+      ])
+      ],
+      password: ["", Validators.compose([
+        Validators.min(10),
+        Validators.max(20),
+        Validators.required
+      ])],
     });
   }
 
@@ -76,10 +98,32 @@ export class ProfileComponent {
   }
 
   public async videosByUser(): Promise<void> {
-    await this.router.navigateByUrl(`/videos/${this.user.id}`);
+    await this.router.navigate(['videos'], {
+      queryParams: {userId: this.user.id}
+    });
   }
 
   public changeUserInfo(): void {
-    throw new Error();
+    this.showEditControls = true;
+  }
+
+  public saveUserChanges(): void {
+    if (this.form.valid) {
+      this.user.username = this.form.get("username")?.value;
+      this.user.password = this.form.get("password")?.value;
+
+      this.httpClient
+        .post<IResponseType<any>>(`/api/profile/${this.user.id}`, this.user)
+        .pipe(
+          catchError(v =>Observable.create(new EmptyResponse()))
+        )
+        .subscribe(v => {
+          if ((v as IResponseType<any>).status === "ok") {
+             this.showEditControls = false;
+           } else {
+             this.matSnackBar.open("Some http errors have occurred :(", "Close");
+           }
+        });
+    }
   }
 }
