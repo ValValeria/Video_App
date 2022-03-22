@@ -3,11 +3,18 @@
                     cssClass="videos">
   <div class="videos__content-area w-100">
     <div class="videos__no-results mb-1">
-      <app-no-results [isError]="isError && !isLoading" *ngIf="!isLoading">
+      <app-no-results [isError]="isError"
+                      [noResults]="!videos.length"
+                      *ngIf="!isLoading && (isError || !videos.length)">
       </app-no-results>
     </div>
     <div class="videos__loading mt-3" *ngIf="isLoading">
       <mat-progress-bar mode="buffer"></mat-progress-bar>
+    </div>
+    <div class="videos__list mt-4">
+      <ng-container *ngFor="let video of videos">
+        <app-video-card [video]="video"></app-video-card>
+      </ng-container>
     </div>
   </div>
 </app-section-layout>

@@ -4,7 +4,7 @@
        <ng-container *ngIf="isError">
           {{'Some errors have occurred' | uppercase}}
        </ng-container>
-       <ng-container *ngIf="!isError">
+       <ng-container *ngIf="noResults">
          {{'Sorry :( But there are no results' | uppercase}}
        </ng-container>
      </mat-card-title>

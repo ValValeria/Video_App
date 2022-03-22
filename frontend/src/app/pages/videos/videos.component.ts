@@ -42,7 +42,7 @@ export class VideosComponent implements OnInit {
         if (v !== null) {
           this.isError = false;
 
-          this.videos.splice(0, this.videos.length, ...v.data.results);
+          this.videos.push(...v.data.results);
         }
       });
   }

@@ -8,6 +8,8 @@ import {Component, Input, OnInit} from '@angular/core';
 export class NoResultsComponent implements OnInit {
   @Input()
   public isError: boolean = false;
+  @Input()
+  public noResults: boolean = false;
 
   constructor() { }
 
