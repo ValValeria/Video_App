@@ -30,4 +30,5 @@ import {UserService} from "./services/user.service";
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

@@ -2,6 +2,12 @@
                     description="Using our app, you can find what you really like"
                     cssClass="videos">
   <div class="videos__content-area w-100">
-
+    <div class="videos__no-results mb-1">
+      <app-no-results [isError]="isError && !isLoading" *ngIf="!isLoading">
+      </app-no-results>
+    </div>
+    <div class="videos__loading mt-3" *ngIf="isLoading">
+      <mat-progress-bar mode="buffer"></mat-progress-bar>
+    </div>
   </div>
 </app-section-layout>

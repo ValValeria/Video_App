@@ -1,0 +1,12 @@
+<div class="no-results mt-3">
+  <mat-card>
+     <mat-card-title>
+       <ng-container *ngIf="isError">
+          {{'Some errors have occurred' | uppercase}}
+       </ng-container>
+       <ng-container *ngIf="!isError">
+         {{'Sorry :( But there are no results' | uppercase}}
+       </ng-container>
+     </mat-card-title>
+  </mat-card>
+</div>
