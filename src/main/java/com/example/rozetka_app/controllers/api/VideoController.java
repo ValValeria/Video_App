@@ -108,7 +108,7 @@ public class VideoController {
             }
 
             Principal principal = request.getUserPrincipal();
-            AppUser user = userRepository.findByUsername(principal.getName());
+            AppUser user = userRepository.findAppUserByUsername(principal.getName());
 
             if (user != null) {
                 video.setPath(path);

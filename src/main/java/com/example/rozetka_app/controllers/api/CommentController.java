@@ -105,7 +105,7 @@ public class CommentController {
 
             if(optionalVideo.isPresent()) {
                 Video video = optionalVideo.get();
-                AppUser user = this.userRepository.findByUsername(principal.getName());
+                AppUser user = this.userRepository.findAppUserByUsername(principal.getName());
 
                 comment.setUser(user);
                 comment.setVideo(video);

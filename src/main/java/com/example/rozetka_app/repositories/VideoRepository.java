@@ -15,6 +15,9 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
     @Query("from Video v where v.user.username like :search or v.description like :search or v.title like :search")
     Page<Video> findAllByText(String search, Pageable pageable);
 
+    @Query("from Video v where v.user.id = :id")
+    Page<Video> findByUserId(Long id, Pageable pageable);
+
     Video findVideoById(Long id);
 
     void deleteVideoById(Long id);

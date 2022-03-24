@@ -105,7 +105,7 @@ public class SecurityAspect {
             Object object = null;
 
             if(this.clazz.isAssignableFrom(AppUser.class)){
-                object = this.userRepository.findUserById(entityId);
+                object = this.userRepository.findById(entityId);
             }
             if(this.clazz.isAssignableFrom(Video.class)){
                 object = this.videoRepository.findVideoById(entityId);
@@ -169,7 +169,7 @@ public class SecurityAspect {
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
-        final AppUser authUser = this.userRepository.findByUsername(getAuthentication().getName());
+        final AppUser authUser = this.userRepository.findAppUserByUsername(getAuthentication().getName());
 
         if (o instanceof Comment) {
             Comment comment = (Comment) o;

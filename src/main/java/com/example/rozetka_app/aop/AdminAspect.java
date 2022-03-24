@@ -37,7 +37,7 @@ public class AdminAspect {
 
         if(authentication.isAuthenticated()){
             String username = authentication.getName();
-            final AppUser authUser = this.userRepository.findByUsername(username);
+            final AppUser authUser = this.userRepository.findAppUserByUsername(username);
 
             if(authUser != null && authUser.getRole().equals("admin")){
                shouldProceed = true;

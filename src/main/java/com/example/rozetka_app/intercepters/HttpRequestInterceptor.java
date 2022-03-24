@@ -14,6 +14,10 @@ public class HttpRequestInterceptor implements HandlerInterceptor {
             response.setHeader("Content-Type", "text/html");
         }
 
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "*");
+
         return true;
     }
 }

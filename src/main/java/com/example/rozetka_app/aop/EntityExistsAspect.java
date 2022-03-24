@@ -33,7 +33,6 @@ public class EntityExistsAspect {
     private final UserRepository userRepository;
     private final VideoRepository videoRepository;
     private final ResponseService<Object> responseService;
-    private boolean isAllowed = false;
 
     @Autowired
     public EntityExistsAspect(
@@ -63,7 +62,7 @@ public class EntityExistsAspect {
         Object object = null;
 
         if(classType.isAssignableFrom(AppUser.class)){
-            object = this.userRepository.findUserById(entityId);
+            object = this.userRepository.findById(entityId);
         }
         if(classType.isAssignableFrom(Video.class)){
             object = this.videoRepository.findVideoById(entityId);

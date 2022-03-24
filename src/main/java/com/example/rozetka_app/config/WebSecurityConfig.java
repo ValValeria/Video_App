@@ -1,7 +1,6 @@
 package com.example.rozetka_app.config;
 
 import com.example.rozetka_app.filters.CustomAuthenticationFilter;
-import com.example.rozetka_app.filters.CustomAuthorizationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -15,9 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.example.rozetka_app.services.UserService;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -38,11 +34,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf()
-                .disable();
-
         httpSecurity.authorizeRequests()
-                .anyRequest().permitAll();
+                    .anyRequest()
+                    .permitAll()
+                    .and()
+                    .cors()
+                    .disable()
+                    .csrf()
+                    .disable();
 
         httpSecurity.addFilter(new CustomAuthenticationFilter());
     }

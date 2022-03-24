@@ -13,10 +13,15 @@ import com.example.rozetka_app.services.ResponseService;
 import com.example.rozetka_app.statuscodes.DefinedErrors;
 import com.example.rozetka_app.statuscodes.DefinedStatusCodes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import static com.example.rozetka_app.security.AppSecurityUserRolesList.*;
 
@@ -66,13 +71,15 @@ public class ProfileController {
     )
     @EntityMustExists(classType = AppUser.class)
     private Object viewProfile(@PathVariable(name = "id") Long entityId) {
-        AppUser user = this.userRepository.findUserById(entityId);
+        Optional<AppUser> user = this.userRepository.findById(entityId);
 
-        Map<String, Object> objectMap = new java.util.HashMap<>();
-        objectMap.put("user", this.userRepository.findUserById(entityId));
-        objectMap.put("video", user.getVideos());
+        if (user.isPresent()) {
+            Map<String, Object> objectMap = new java.util.HashMap<>();
+            objectMap.put("user", user.get());
+            objectMap.put("video", user.get().getVideos());
 
-        this.responseService.setData(objectMap);
+            this.responseService.setData(objectMap);
+        }
 
         return this.responseService;
     }
@@ -140,6 +147,23 @@ public class ProfileController {
         } else {
             this.responseService.addFullStatusInfo(DefinedErrors.ENTITY_NOT_FOUND.getAllInfo());
         }
+
+        return this.responseService;
+    }
+
+    @GetMapping("/{id}/videos")
+    @EntityMustExists(classType = AppUser.class)
+    private Object getVideos(
+            @PathVariable(name = "id") Long entityId,
+            @RequestParam int page,
+            @RequestParam int size
+    ) {
+        Page<Video> videoPage = this.videoRepository.findByUserId(entityId, PageRequest.of(page, size));
+
+        EnumMap<ResponseDataType, Object> enumMap = new EnumMap<>(ResponseDataType.class);
+        enumMap.put(ResponseDataType.RESULTS, videoPage.getContent());
+
+        this.responseService.setEnumData(enumMap);
 
         return this.responseService;
     }

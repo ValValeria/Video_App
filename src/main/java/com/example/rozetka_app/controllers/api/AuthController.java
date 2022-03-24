@@ -40,7 +40,7 @@ public class AuthController {
             BindingResult bindingResult
     ) {
         if (!bindingResult.hasErrors()) {
-            AppUser appUser = this.userRepository.findByUsername(user.getUsername());
+            AppUser appUser = this.userRepository.findAppUserByUsername(user.getUsername());
 
             if (appUser == null) {
                 com.example.rozetka_app.security.AppUser securityUser = new com.example.rozetka_app.security.AppUser(
