@@ -60,6 +60,7 @@
               <button color="accent" mat-flat-button (click)="videosByUser()">View videos</button>
               <button color="warn" mat-flat-button (click)="deleteUserProfile()">Delete the profile</button>
               <button color="primary" mat-flat-button (click)="changeUserInfo()">Change the user's info</button>
+              <button color="accent" mat-flat-button (click)="addVideo()" *ngIf="userService.isAdmin()">Add video</button>
             </div>
           </mat-card-content>
         </mat-card>

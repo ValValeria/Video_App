@@ -10,10 +10,12 @@ import {FooterModule} from "./components/footer/footer.module";
 import {SharedModule} from "./shared/shared.module";
 import {NavigationDrawerModule} from "./components/navigation-drawer/navigation-drawer.module";
 import {UserService} from "./services/user.service";
+import { AddVideoComponent } from './pages/add-video/add-video.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AddVideoComponent
   ],
   imports: [
     BrowserModule,

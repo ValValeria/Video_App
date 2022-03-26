@@ -38,12 +38,6 @@ const routes: Routes = [
     loadChildren: () => import("./pages/contact/contact.module").then(v => v.ContactModule)
   },
   {
-    path: 'admin-panel',
-    loadChildren: () => import("./pages/admin-panel/admin-panel.module").then(v => v.AdminPanelModule),
-    canLoad: [AdminOnlyGuard],
-    pathMatch: "full"
-  },
-  {
     path: 'video/:id',
     loadChildren: () => import("./pages/video/video.module").then(v => v.VideoModule),
     canLoad: [AuthGuard],
@@ -54,6 +48,10 @@ const routes: Routes = [
     loadChildren: () => import("./pages/search/search.module").then(v => v.SearchModule),
     canLoad: [AuthGuard],
     pathMatch: "full"
+  },
+  {
+    path: 'add-video',
+    loadChildren: () => import("./pages/add-video/add-video.module").then(v => v.AddVideoModule)
   }
 ];
 

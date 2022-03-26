@@ -26,7 +26,7 @@ export class ProfileComponent {
   public readonly form: FormGroup;
 
   constructor(
-    private userService: UserService,
+    public userService: UserService,
     private httpClient: HttpClient,
     private activatedRoute: ActivatedRoute,
     private matSnackBar: MatSnackBar,
@@ -105,6 +105,10 @@ export class ProfileComponent {
 
   public changeUserInfo(): void {
     this.showEditControls = true;
+  }
+
+  public addVideo(): void {
+
   }
 
   public saveUserChanges(): void {
