@@ -12,7 +12,17 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Table(name = "rozetka_app_users")
-public class AppUser extends BaseUser {
+public class AppUser {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    protected Long id;
+
+    @Column
+    @Size(min = 10, max = 25)
+    @NotNull
+    protected String username;
+
     @OneToMany(targetEntity = Video.class, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Video> videos;
 
@@ -28,7 +38,24 @@ public class AppUser extends BaseUser {
     protected String password;
 
     @Column(columnDefinition = "enum(\"user\", \"admin\") default \"user\"")
+    @NotNull
     protected String role;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getPassword() {
         return password;

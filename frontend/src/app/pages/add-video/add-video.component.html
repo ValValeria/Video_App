@@ -1,1 +1,41 @@
-<p>add-video works!</p>
+<app-section-layout title="Add a new video"
+                    cssClass="add-video">
+  <div class="add-video__section">
+    <div class="add-video__upload mt-3">
+      <div class="add-video__steps mb-3">
+        <mat-card class="text-left">
+           <mat-card-subtitle>
+             Steps
+           </mat-card-subtitle>
+           <mat-card-content>
+             <p-steps [model]="items"></p-steps>
+           </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="add-video__upload-btn mb-3 text-left">
+        <mat-card>
+          <mat-card-subtitle>
+            Video
+          </mat-card-subtitle>
+          <mat-card-content>
+            <button pButton type="button" class="p-button-info">Upload an video</button>
+            <button pButton type="button" class="p-button-warning ml-2">Erase an video</button>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="add-video__editor mb-4">
+        <mat-card class="add-video__description text-left">
+          <mat-card-subtitle>
+            Description
+          </mat-card-subtitle>
+          <mat-card-content>
+            <p-editor [(ngModel)]="video.description" [style]="{'height':'320px'}"></p-editor>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="add-video__save-btn">
+        <button pButton type="button" class="p-button-info">Save the video</button>
+      </div>
+    </div>
+  </div>
+</app-section-layout>

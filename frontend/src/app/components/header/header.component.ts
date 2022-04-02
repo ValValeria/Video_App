@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 
 import {menuClick$} from "../../subjects/header-component.subject";
 import {UserService} from "../../services/user.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-header',
@@ -10,10 +11,15 @@ import {UserService} from "../../services/user.service";
 })
 export class HeaderComponent{
   constructor(
-    public userService: UserService
+    public userService: UserService,
+    private router: Router
   ) { }
 
-  handleClick() {
+  public handleClick(): void {
     menuClick$.next(null);
+  }
+
+  public async navigateToHome(): Promise<void> {
+    await this.router.navigateByUrl("/");
   }
 }

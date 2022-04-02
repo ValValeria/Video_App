@@ -52,6 +52,10 @@ const routes: Routes = [
   {
     path: 'add-video',
     loadChildren: () => import("./pages/add-video/add-video.module").then(v => v.AddVideoModule)
+  },
+  {
+    path: 'letters',
+    loadChildren: () => import("./pages/view-letters/view-letters.module").then(v => v.ViewLettersModule)
   }
 ];
 

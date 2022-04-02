@@ -2,7 +2,7 @@
   <mat-toolbar-row>
     <div class="container-fluid">
         <div class="d-flex justify-content-between">
-          <span [class.text-white]="true">Video App</span>
+          <span [class.text-white]="true" (click)="navigateToHome()">Video App</span>
           <div>
             <button mat-icon-button class="mr-2" *ngIf="userService.user.isAuth">
               <mat-icon>search</mat-icon>

@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {IVideo} from "../../types/interfaces";
+import {VideoModel} from "../../models/video.model";
+import {MenuItem} from "primeng/api";
 
 @Component({
   selector: 'app-add-video',
@@ -6,10 +9,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./add-video.component.scss']
 })
 export class AddVideoComponent implements OnInit {
+  public readonly video: IVideo;
+  public readonly items: MenuItem[];
 
-  constructor() { }
+  constructor() {
+    this.video = new VideoModel();
+    this.items = [
+      {label: "Upload an video"},
+      {label: "Add description"},
+      {label: "Save the video"},
+    ];
+  }
 
   ngOnInit(): void {
   }
-
 }

@@ -3,8 +3,9 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 import {SharedModule} from "../../shared/shared.module";
 import {ContactFormComponent} from "./contact-form.component";
+import {ButtonModule} from "primeng/button";
 import {InputTextModule} from 'primeng/inputtext';
-import {ToastModule} from 'primeng/toast';
+import {InputTextareaModule} from 'primeng/inputtextarea';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import {ToastModule} from 'primeng/toast';
     SharedModule,
     MatSnackBarModule,
     InputTextModule,
-    ToastModule
+    ButtonModule,
+    InputTextareaModule
   ],
   exports: [ContactFormComponent]
 })

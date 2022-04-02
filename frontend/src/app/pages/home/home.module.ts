@@ -4,6 +4,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {HomeComponent} from "./home.component";
 import {SharedModule} from "../../shared/shared.module";
 import {SectionLayoutModule} from "../../layouts/section-layout/section-layout.module";
+import {ButtonModule} from "primeng/button";
 
 const routes: Routes = [
   {path: "", component: HomeComponent}
@@ -14,7 +15,8 @@ const routes: Routes = [
   imports: [
     RouterModule.forChild(routes),
     SharedModule,
-    SectionLayoutModule
+    SectionLayoutModule,
+    ButtonModule
   ]
 })
 export class HomeModule{}
