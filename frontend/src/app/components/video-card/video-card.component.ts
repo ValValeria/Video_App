@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {IVideo} from "../../types/interfaces";
 import {VideoModel} from "../../models/video.model";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-video-card',
@@ -9,6 +10,9 @@ import {VideoModel} from "../../models/video.model";
 })
 export class VideoCardComponent {
   private _video: IVideo | undefined;
+
+  public constructor(private router: Router) {
+  }
 
   @Input()
   public set video(value: IVideo) {
@@ -25,5 +29,9 @@ export class VideoCardComponent {
     }
 
     return result;
+  }
+
+  public async handleClick(): Promise<void> {
+    await this.router.navigateByUrl(`/video/${this.video.id}`);
   }
 }

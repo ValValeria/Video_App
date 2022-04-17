@@ -1,3 +1,13 @@
-<app-section-layout title="Profile">
-
+<app-section-layout title="Video"
+                    cssClass="video">
+  <mat-card class="video__card w-100">
+     <mat-card-title class="text-left mb-4">{{video.title}}</mat-card-title>
+     <mat-card-content class="text-left">
+       <p-accordion>
+         <p-accordionTab header="Description">
+           {{video.description}}
+         </p-accordionTab>
+       </p-accordion>
+     </mat-card-content>
+  </mat-card>
 </app-section-layout>

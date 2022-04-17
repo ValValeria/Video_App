@@ -23,6 +23,14 @@ export interface IMultipleResponse<T> {
   results: T[];
 }
 
+export interface ISingleResultResponse<T> {
+  errors: string[];
+  status: "ok" | "not ok";
+  data: {
+    result: T
+  }
+}
+
 export interface IUser{
   isAuth: boolean;
   username: string;

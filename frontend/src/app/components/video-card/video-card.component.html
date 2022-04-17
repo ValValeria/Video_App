@@ -1,4 +1,4 @@
-<mat-card class="text-left mb-1">
+<mat-card class="video-card text-left mb-1">
   <mat-card-title>
     {{video.title}}
   </mat-card-title>
@@ -9,7 +9,11 @@
   <mat-card-content>
     {{video.description.slice(0, 40)}}
   </mat-card-content>
-  <mat-card-actions>
-    <button mat-flat-button color="primary" class="w-100">View</button>
+  <mat-card-actions class="w-100 d-flex justify-content-center">
+    <button class="video-card__btn"
+            mat-flat-button color="primary"
+            (click)="handleClick()">
+      View
+    </button>
   </mat-card-actions>
 </mat-card>

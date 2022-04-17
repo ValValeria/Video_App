@@ -40,7 +40,6 @@ const routes: Routes = [
   {
     path: 'video/:id',
     loadChildren: () => import("./pages/video/video.module").then(v => v.VideoModule),
-    canLoad: [AuthGuard],
     pathMatch: "full"
   },
   {
