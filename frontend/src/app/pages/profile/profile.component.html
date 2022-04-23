@@ -49,6 +49,9 @@
         </mat-card-content>
       </mat-card>
     </div>
+    <div class="profile__videos">
+      <p-button label="View videos" (click)="videosByUser()" class="profile__view-videos-btn w-100"></p-button>
+    </div>
     <div class="profile__actions w-100 text-left">
       <div class="w-100 h-100">
         <mat-card class="h-100">
@@ -56,8 +59,7 @@
             Actions
           </mat-card-subtitle>
           <mat-card-content>
-            <div class="grid-auto">
-              <button color="accent" mat-flat-button (click)="videosByUser()">View videos</button>
+            <div class="grid-auto {{hideActions ? 'blur' : ''}}">
               <button color="warn" mat-flat-button (click)="deleteUserProfile()">Delete the profile</button>
               <button color="primary" mat-flat-button (click)="changeUserInfo()">Change the user's info</button>
               <button color="accent" mat-flat-button (click)="addVideo()" *ngIf="userService.isAdmin()">Add video</button>

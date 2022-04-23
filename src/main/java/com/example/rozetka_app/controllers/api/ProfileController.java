@@ -167,4 +167,21 @@ public class ProfileController {
 
         return this.responseService;
     }
+
+    @GetMapping("/{id}/likes")
+    @SecurityPermissionsContext(
+            permission = CAN_VIEW_PROFILE,
+            className = AppUser.class
+    )
+    @EntityMustExists(classType = AppUser.class)
+    private ResponseService<Object> getUserLikes(@PathVariable(name = "id") Long entityId) {
+        AppUser user = this.userRepository.findUserById(entityId);
+
+        EnumMap<ResponseDataType, Object> enumMap = new EnumMap<>(ResponseDataType.class);
+        enumMap.put(ResponseDataType.RESULTS, user.getLikes());
+
+        this.responseService.setEnumData(enumMap);
+
+        return this.responseService;
+    }
 }

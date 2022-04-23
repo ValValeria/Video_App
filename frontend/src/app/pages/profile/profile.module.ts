@@ -6,6 +6,7 @@ import {SectionLayoutModule} from "../../layouts/section-layout/section-layout.m
 import {RouterModule, Routes} from "@angular/router";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatListModule} from "@angular/material/list";
+import {ButtonModule} from "primeng/button";
 
 const routes: Routes = [
   {path: "", component: ProfileComponent, pathMatch: "full"}
@@ -20,7 +21,8 @@ const routes: Routes = [
     SectionLayoutModule,
     MatSnackBarModule,
     MatListModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    ButtonModule
   ]
 })
 export class ProfileModule {

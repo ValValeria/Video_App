@@ -6,6 +6,10 @@
   grid-gap: 1.25rem;
 }
 
+.profile__videos{
+  grid-column: 1/-1;
+}
+
 .profile__user-img {
   grid-column: span 4;
 }
@@ -20,4 +24,13 @@
 
 .profile__videos-count {
   grid-column: span 5;
+}
+
+.profile__view-videos-btn button {
+  width: 100%;
+  padding: 10px;
+}
+
+.blur {
+  filter: blur(33px);
 }

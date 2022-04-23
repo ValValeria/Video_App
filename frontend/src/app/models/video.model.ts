@@ -1,4 +1,5 @@
-import {IVideo} from "../types/interfaces";
+import {IUser, IVideo} from "../types/interfaces";
+import {UserModel} from "./user.model";
 
 export class VideoModel implements IVideo{
   private _createdAt: string;
@@ -6,6 +7,7 @@ export class VideoModel implements IVideo{
   private _id: number;
   private _path: string;
   private _title: string;
+  private _author: IUser;
 
   public constructor() {
     this._createdAt = new Date().toLocaleDateString();
@@ -13,6 +15,7 @@ export class VideoModel implements IVideo{
     this._id = -1;
     this._path = '';
     this._title = '';
+    this._author = new UserModel();
   }
 
   get createdAt(): string {
@@ -53,5 +56,13 @@ export class VideoModel implements IVideo{
 
   set title(value: string) {
     this._title = value;
+  }
+
+  get author(): IUser {
+    return this._author;
+  }
+
+  set author(value: IUser) {
+    this._author = value;
   }
 }

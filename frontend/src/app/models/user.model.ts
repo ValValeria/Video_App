@@ -1,7 +1,7 @@
 import {IUser} from "../types/interfaces";
 import {Roles} from "../types/roles";
 
-export class User implements IUser {
+export class UserModel implements IUser {
   private _id: number;
   private _isAuth: boolean;
   private _password: string;
@@ -13,7 +13,7 @@ export class User implements IUser {
     this._isAuth = false;
     this._password = '';
     this._username = '';
-    this._role = Roles.ADMIN;
+    this._role = Roles.USER;
   }
 
   get id(): number {

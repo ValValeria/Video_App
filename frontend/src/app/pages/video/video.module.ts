@@ -5,6 +5,8 @@ import {AccordionModule} from 'primeng/accordion';
 import {SharedModule} from "../../shared/shared.module";
 import {VideoComponent} from "./video.component";
 import {SectionLayoutModule} from "../../layouts/section-layout/section-layout.module";
+import {KnobModule} from 'primeng/knob';
+import {ButtonModule} from "primeng/button";
 
 const routes: Routes = [
   {path: "", pathMatch: "full", component: VideoComponent}
@@ -18,7 +20,9 @@ const routes: Routes = [
     SharedModule,
     SectionLayoutModule,
     RouterModule.forChild(routes),
-    AccordionModule
+    AccordionModule,
+    KnobModule,
+    ButtonModule
   ]
 })
 export class VideoModule {

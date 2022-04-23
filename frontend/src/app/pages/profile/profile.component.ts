@@ -7,8 +7,8 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {Observable} from "rxjs";
 import {catchError, retry} from "rxjs/operators";
 
-import {IMultipleResponse, IResponseType, IUser} from "../../types/interfaces";
-import {User} from "../../models/user.model";
+import {IMultipleResponse, IResponseType, ISingleResultResponse, IUser} from "../../types/interfaces";
+import {UserModel} from "../../models/user.model";
 import {UserService} from "../../services/user.service";
 import {Roles} from "../../types/roles";
 import {EmptyResponse} from "../../types/classes";
@@ -20,8 +20,9 @@ import {EmptyResponse} from "../../types/classes";
 })
 export class ProfileComponent {
   public totalVideoCount: number = 0;
-  public user: IUser = new User();
+  public user: IUser = new UserModel();
   public showEditControls: boolean = false;
+  public hideActions: boolean = true;
 
   public readonly form: FormGroup;
 
@@ -38,10 +39,14 @@ export class ProfileComponent {
 
        if (userService.user.id === id) {
          this.user = userService.user;
-
+         this.hideActions = false;
          this.loadVideosCount();
-       } else if (userService.user.role === Roles.ADMIN) {
+       } else if (userService.isAdmin()) {
+         this.hideActions = false;
          this.loadUserById(id);
+       } else {
+         this.hideActions = true;
+         this.loadUserWithHideProps(id);
        }
     });
 
@@ -89,9 +94,9 @@ export class ProfileComponent {
 
   private loadUserById(userId: number): void {
      this.httpClient
-       .get<IMultipleResponse<IUser>>(`/api/videos/${userId}/`)
+       .get<ISingleResultResponse<IUser>>(`/api/user/${userId}/`)
        .subscribe(v => {
-         this.user = v.results[0];
+         this.user = v.data.result;
 
          this.loadVideosCount();
        });
@@ -129,5 +134,15 @@ export class ProfileComponent {
            }
         });
     }
+  }
+
+  public loadUserWithHideProps(id: number): void {
+    this.httpClient
+      .get<ISingleResultResponse<IUser>>(`/api/public-user/${id}`)
+      .subscribe(v => {
+        this.user = v.data.result;
+
+        this.loadVideosCount();
+      });
   }
 }

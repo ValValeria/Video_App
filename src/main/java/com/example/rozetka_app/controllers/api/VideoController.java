@@ -37,7 +37,6 @@ public class VideoController {
     private final VideoRepository videoRepository;
     private final ResponseService<Object> responseService;
     private final UserRepository userRepository;
-
     @Autowired
     public VideoController(
             VideoRepository videoRepository,

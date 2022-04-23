@@ -12,7 +12,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Table(name = "rozetka_app_users")
-public class AppUser {
+public class AppUser extends BaseUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -22,9 +22,6 @@ public class AppUser {
     @Size(min = 10, max = 25)
     @NotNull
     protected String username;
-
-    @OneToMany(targetEntity = Video.class, mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Video> videos;
 
     @OneToMany(targetEntity = Comment.class, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Comment> comments;
@@ -71,18 +68,6 @@ public class AppUser {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public void addToVideoList(Video video){
-        this.videos.add(video);
-    }
-
-    public List<Video> getVideos() {
-        return videos;
-    }
-
-    public void setVideos(List<Video> videos) {
-        this.videos = videos;
     }
 
     public List<Comment> getComments() {

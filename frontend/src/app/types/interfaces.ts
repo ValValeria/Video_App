@@ -5,7 +5,8 @@ export interface IVideo {
   path: string;
   title: string;
   createdAt: string;
-  description: string
+  description: string;
+  author: IUser;
 }
 
 export interface IResponseType<T> {
@@ -34,7 +35,7 @@ export interface ISingleResultResponse<T> {
 export interface IUser{
   isAuth: boolean;
   username: string;
-  password: string;
+  password?: string;
   id: number;
-  role: Roles;
+  role?: Roles;
 }

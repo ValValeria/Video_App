@@ -1,13 +1,36 @@
 <app-section-layout title="Video"
                     cssClass="video">
-  <mat-card class="video__card w-100">
-     <mat-card-title class="text-left mb-4">{{video.title}}</mat-card-title>
-     <mat-card-content class="text-left">
-       <p-accordion>
-         <p-accordionTab header="Description">
-           {{video.description}}
-         </p-accordionTab>
-       </p-accordion>
-     </mat-card-content>
-  </mat-card>
+  <ng-container *ngIf="!isLoading">
+    <mat-card class="video__card w-100 text-left">
+      <mat-card-title class="mb-4">{{video.title}}</mat-card-title>
+      <mat-card-subtitle>
+        <button pButton
+                type="button"
+                class="p-button-text">
+          Author:
+        </button>
+        <button pButton
+                type="button"
+                label="{{video.author.username}}"
+                class="p-button-sm"
+                (click)="navigateToAuthorPage()">
+        </button>
+      </mat-card-subtitle>
+      <mat-card-content class="text-left">
+        <div class="video__elem mb-2">
+          <video controls class="w-100 h-100">
+            <source src="{{video.path}}"/>
+          </video>
+        </div>
+        <p-accordion>
+          <p-accordionTab header="Description">
+            {{video.description}}
+          </p-accordionTab>
+        </p-accordion>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+  <ng-container *ngIf="isLoading">
+    <p-knob [(ngModel)]="value"></p-knob>
+  </ng-container>
 </app-section-layout>

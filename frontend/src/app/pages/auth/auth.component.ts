@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, ViewEncapsulation} from '@angular/core';
 
 @Component({
   selector: 'app-auth',
@@ -6,10 +6,5 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
   styleUrls: ['./auth.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class AuthComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+export class AuthComponent {
 }
