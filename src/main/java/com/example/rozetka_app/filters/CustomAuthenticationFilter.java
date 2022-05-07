@@ -1,6 +1,6 @@
 package com.example.rozetka_app.filters;
 
-import com.example.rozetka_app.security.AppUser;
+import com.example.rozetka_app.security.SecurityAppUser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpHeaders;
@@ -19,7 +19,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         try {
             String credentials = request.getHeader(HttpHeaders.AUTHORIZATION);
-            AppUser baseUser = new ObjectMapper().readValue(credentials, AppUser.class);
+            SecurityAppUser baseUser = new ObjectMapper().readValue(credentials, SecurityAppUser.class);
             authenticationToken = new UsernamePasswordAuthenticationToken(baseUser.getUsername(), baseUser.getPassword());
         } catch (JsonProcessingException e) {
             e.printStackTrace();

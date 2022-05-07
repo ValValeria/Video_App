@@ -1,11 +1,19 @@
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
+import {ErrorStateMatcher} from "@angular/material/core";
 
 import {UserService} from "../../services/user.service";
 import {IResponseType, ITokens} from "../../types/interfaces";
+
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 
 @Component({
   selector: 'app-auth-form',
@@ -13,9 +21,11 @@ import {IResponseType, ITokens} from "../../types/interfaces";
   styleUrls: ['./auth-form.component.scss']
 })
 export class AuthFormComponent implements OnChanges {
-  @Input() isLogin: boolean = true;
-  public form: FormGroup;
-  private readonly validators: ((control: AbstractControl) => (ValidationErrors | null))[];
+  @Input()
+  public isLogin: boolean = true;
+
+  public readonly form: FormGroup;
+  public readonly matcher: MyErrorStateMatcher;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -24,16 +34,24 @@ export class AuthFormComponent implements OnChanges {
     private snackBar: MatSnackBar,
     private router: Router
   ) {
-    this.validators = [
-      Validators.required,
-      Validators.max(25),
-      Validators.min(10)
-    ];
-
     this.form = formBuilder.group({
-        password: ['', Validators.compose(this.validators)],
-        username: ['', Validators.compose(this.validators)]
+      password: ['', Validators.compose([
+          Validators.required,
+          Validators.max(25),
+          Validators.min(10)
+        ]
+      )],
+      username: ['', Validators.compose(
+        [
+          Validators.required,
+          Validators.max(25),
+          Validators.min(10),
+          Validators.pattern(/[aA-zZ]/gi)
+        ]
+      )]
     });
+
+    this.matcher = new MyErrorStateMatcher();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -41,18 +59,22 @@ export class AuthFormComponent implements OnChanges {
 
     if (value === true) {
       this.form.removeControl("email");
-    }
-    else if(!this.form.contains("email")) {
+    } else if (!this.form.contains("email")) {
       const control = this.formBuilder.control(
         "",
-        Validators.compose([...this.validators, Validators.email])
+        Validators.compose([
+          Validators.email,
+          Validators.required,
+          Validators.max(25),
+          Validators.min(10)
+        ])
       );
       this.form.addControl("email", control);
     }
   }
 
   async submit(): Promise<void> {
-    if(this.form.valid) {
+    if (this.form.valid) {
       this.httpClient.post<IResponseType<ITokens>>('/api/auth/sign-up', this.form.value).subscribe(v => {
         if (v.status === "ok") {
           this.userService.user.isAuth = true;
@@ -62,9 +84,20 @@ export class AuthFormComponent implements OnChanges {
           this.snackBar.open("Some errors have occurred", "Close");
         }
       });
-    }
-    else {
+    } else {
       this.snackBar.open("Please, check the validity of form", "Close");
     }
+  }
+
+  public get email(): FormControl {
+    return this.form.get("email") as FormControl;
+  }
+
+  public get password(): FormControl {
+    return this.form.get("password") as FormControl;
+  }
+
+  public get username(): FormControl {
+    return this.form.get("username") as FormControl;
   }
 }

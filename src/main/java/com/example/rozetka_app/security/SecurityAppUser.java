@@ -5,15 +5,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-public class AppUser implements UserDetails {
+public class SecurityAppUser implements UserDetails {
     private final String password;
     private final String username;
     private final Collection<? extends GrantedAuthority> authorities;
     private String role;
 
-    public AppUser(String username,
-                   String password,
-                   Collection<? extends GrantedAuthority> authorities
+    public SecurityAppUser(String username,
+                           String password,
+                           Collection<? extends GrantedAuthority> authorities
                    ) {
         this.password = password;
         this.username = username;

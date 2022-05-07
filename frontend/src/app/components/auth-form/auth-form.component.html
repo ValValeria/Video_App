@@ -1,24 +1,62 @@
 <div class="auth-form w-100 mt-4">
   <form [formGroup]="form"
         class="d-flex flex-column w-100 justify-content-center align-items-center">
-    <div class="p-float-label mb-3 w-100" *ngIf="!isLogin">
-      <input id="float-input" type="text" pInputText class="w-100" formControlName="email">
-      <label for="float-input">Email</label>
-    </div>
-    <div class="p-float-label mb-3 w-100">
-      <input id="input-username" type="text" pInputText class="w-100" formControlName="username">
-      <label for="input-username">Username</label>
-    </div>
-    <div class="p-float-label mb-3 w-100">
-      <label for="password">Password</label>
-      <input id="password" type="password" pPassword formControlName="username" class="w-100" />
-    </div>
+    <mat-form-field class="w-100" appearance="fill" *ngIf="!isLogin">
+      <mat-label>Email</mat-label>
+      <input matInput  class="w-100" formControlName="email" [errorStateMatcher]="matcher">
+      <mat-error *ngIf="email.hasError('email') && !email.hasError('required')">
+        Please enter a valid email address
+      </mat-error>
+      <ng-container *ngIf="email.errors && email.touched">
+        <mat-error *ngIf="email.errors['required']">
+          Email is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="email.errors['maxlength']">
+          The max size of email is <strong>{{email.getError('maxlength').requiredLength}}</strong>
+        </mat-error>
+        <mat-error *ngIf="email.errors['minlength']">
+          The min size of email is <strong>{{email.getError('minlength').requiredLength}}</strong>
+        </mat-error>
+      </ng-container>
+    </mat-form-field>
+    <mat-form-field class="w-100" appearance="fill">
+      <mat-label>Username</mat-label>
+      <input matInput  class="w-100" formControlName="username" [errorStateMatcher]="matcher">
+      <ng-container *ngIf="username.errors && username.touched">
+        <mat-error *ngIf="username.errors['required']">
+          Username is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="username.errors['maxlength']">
+          The max size of username is <strong>{{username.getError('maxlength').requiredLength}}</strong>
+        </mat-error>
+        <mat-error *ngIf="username.errors['minlength']">
+          The min size of username is <strong>{{username.getError('minlength').requiredLength}}</strong>
+        </mat-error>
+        <mat-error *ngIf="username.errors['pattern']">
+          Invalid username
+        </mat-error>
+      </ng-container>
+    </mat-form-field>
+    <mat-form-field class="w-100" appearance="fill">
+      <mat-label>Password</mat-label>
+      <input matInput  class="w-100" formControlName="password" [errorStateMatcher]="matcher">
+      <ng-container *ngIf="password.errors && password.touched">
+        <mat-error *ngIf="password.errors['required']">
+          Password is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="password.errors['maxlength']">
+          The max size of password is <strong>{{password.getError('maxlength').requiredLength}}</strong>
+        </mat-error>
+        <mat-error *ngIf="password.errors['minlength']">
+          The min size of password is <strong>{{password.getError('minlength').requiredLength}}</strong>
+        </mat-error>
+      </ng-container>
+    </mat-form-field>
     <div>
       <button pButton
               type="button"
               class="p-button-info"
-              (click)="submit()"
-              [disabled]="form.invalid">
+              (click)="submit()">
         Submit
       </button>
     </div>

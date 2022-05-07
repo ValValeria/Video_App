@@ -3,6 +3,7 @@ package com.example.rozetka_app.services;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.example.rozetka_app.security.SecurityAppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,7 +39,7 @@ public class UserService implements UserDetailsService {
             collection.addAll(AppSecurityUserRoles.READER.getAuthorities());
         }
 
-        return new com.example.rozetka_app.security.AppUser(
+        return new SecurityAppUser(
                 user.getUsername(),
                 user.getPassword(),
                 collection
