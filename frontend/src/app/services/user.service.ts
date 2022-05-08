@@ -21,4 +21,12 @@ export class UserService {
   public isAdmin(): boolean {
     return this._user.role === Roles.ADMIN;
   }
+
+  public login(user: IUser): void {
+    this._user.isAuth = true;
+    this._user.role = user.role;
+    this._user.username = user.username;
+    this._user.password = user.password;
+    this._user.id = user.id;
+  }
 }

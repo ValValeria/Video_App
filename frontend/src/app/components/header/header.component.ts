@@ -22,4 +22,8 @@ export class HeaderComponent{
   public async navigateToHome(): Promise<void> {
     await this.router.navigateByUrl("/");
   }
+
+  public async navigateToSearchPage(): Promise<void> {
+    await this.router.navigateByUrl("/search");
+  }
 }

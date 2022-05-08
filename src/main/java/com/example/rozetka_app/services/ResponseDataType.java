@@ -4,5 +4,8 @@ public enum ResponseDataType {
     RESULTS,
     RESULT,
     ALL_PAGES,
-    ITEMS
+    ITEMS,
+    ID,
+    ROLE,
+    STATUS;
 }

@@ -4,6 +4,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from "./guards/auth.guard";
 import {AdminOnlyGuard} from "./guards/admin-only.guard";
 import {ProfileGuard} from "./guards/profile.guard";
+import {OnlyAnonimGuard} from "./guards/only-anonim.guard";
 
 const routes: Routes = [
   {
@@ -14,7 +15,8 @@ const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () => import("./pages/auth/auth.module").then(v => v.AuthModule),
-    pathMatch: 'full'
+    pathMatch: 'full',
+    canLoad: [OnlyAnonimGuard]
   },
   {
     path: 'videos',
@@ -25,7 +27,7 @@ const routes: Routes = [
     path: 'profile/:id',
     loadChildren: () => import("./pages/profile/profile.module").then(v => v.ProfileModule),
     pathMatch: "full",
-    canLoad: [ProfileGuard]
+    canLoad: [ProfileGuard, AuthGuard]
   },
   {
     path: 'users',
@@ -40,7 +42,8 @@ const routes: Routes = [
   {
     path: 'video/:id',
     loadChildren: () => import("./pages/video/video.module").then(v => v.VideoModule),
-    pathMatch: "full"
+    pathMatch: "full",
+    canLoad: [AuthGuard]
   },
   {
     path: 'search',
@@ -50,11 +53,13 @@ const routes: Routes = [
   },
   {
     path: 'add-video',
-    loadChildren: () => import("./pages/add-video/add-video.module").then(v => v.AddVideoModule)
+    loadChildren: () => import("./pages/add-video/add-video.module").then(v => v.AddVideoModule),
+    canLoad: [AuthGuard, AdminOnlyGuard]
   },
   {
     path: 'letters',
-    loadChildren: () => import("./pages/view-letters/view-letters.module").then(v => v.ViewLettersModule)
+    loadChildren: () => import("./pages/view-letters/view-letters.module").then(v => v.ViewLettersModule),
+    canLoad: [AuthGuard, AdminOnlyGuard]
   }
 ];
 

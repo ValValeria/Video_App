@@ -4,7 +4,7 @@
         <div class="d-flex justify-content-between">
           <span [class.text-white]="true" (click)="navigateToHome()" class="header__title">Video App</span>
           <div>
-            <button mat-icon-button class="mr-2" *ngIf="userService.user.isAuth">
+            <button mat-icon-button class="mr-2" *ngIf="userService.user.isAuth" (click)="navigateToSearchPage()">
               <mat-icon>search</mat-icon>
             </button>
             <button mat-icon-button>

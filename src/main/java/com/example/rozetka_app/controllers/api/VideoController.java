@@ -2,6 +2,8 @@ package com.example.rozetka_app.controllers.api;
 
 import com.example.rozetka_app.annotations.AdminOnly;
 import com.example.rozetka_app.annotations.EntityMustExists;
+import com.example.rozetka_app.annotations.SecurityPermissionsContext;
+import com.example.rozetka_app.controllers.api.dto.SearchDto;
 import com.example.rozetka_app.models.AppUser;
 import com.example.rozetka_app.models.Video;
 import com.example.rozetka_app.repositories.UserRepository;
@@ -14,7 +16,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +34,11 @@ import java.nio.file.Paths;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import static com.example.rozetka_app.security.AppSecurityUserRolesList.CAN_VIEW_POSTS;
 
 @RestController
 @RequestMapping(path = "/api")
@@ -131,5 +140,34 @@ public class VideoController {
         this.responseService.addFullStatusInfo(DefinedStatusCodes.STATUS_OK.getAllInfo());
 
         return "redirect:/";
+    }
+
+    @GetMapping("/auth/search")
+    @SecurityPermissionsContext(
+            permission = CAN_VIEW_POSTS,
+            className = AppUser.class
+    )
+    private Object search(@RequestBody SearchDto searchDto){
+        Pattern pattern = Pattern.compile("[aA-zZ]{1,20}");
+        Matcher matcher = pattern.matcher(searchDto.getSearch());
+
+        final PageRequest pageRequest = PageRequest.of(searchDto.getPage(), searchDto.getPer_page(), Sort.by("id"));
+        final String resultsKey = ResponseDataType.RESULTS.name().toLowerCase(Locale.ROOT);
+        Page<Video> videoPage;
+
+        if(matcher.find()) {
+            videoPage = videoRepository.findAllByText("%" + searchDto.getSearch() + "%", Pageable.ofSize(searchDto.getPer_page()));
+        } else {
+            videoPage = videoRepository.findAll(pageRequest);
+        }
+
+        final Map<String, Object> pageDataMap = new LinkedHashMap<>(Map.of(
+                resultsKey, videoPage.get().collect(Collectors.toList()),
+                "page", videoPage.getTotalPages()
+        ));
+
+        this.responseService.setData(pageDataMap);
+
+        return this.responseService;
     }
 }

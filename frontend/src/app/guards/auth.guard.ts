@@ -1,16 +1,20 @@
-import { Injectable } from '@angular/core';
-import { CanLoad, Route, UrlSegment, UrlTree} from '@angular/router';
+import {Injectable} from '@angular/core';
+import {CanLoad, Route, UrlSegment, UrlTree} from '@angular/router';
 
-import { Observable } from 'rxjs';
+import {Observable, of} from 'rxjs';
 
-import { UserService } from "../services/user.service";
+import {UserService} from "../services/user.service";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable()
 export class AuthGuard implements CanLoad {
-  public constructor(private userService: UserService) {
+  public constructor(
+    private userService: UserService,
+    private httpClient: HttpClient
+  ) {
   }
 
-  canLoad(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree>{
-    return Observable.create(this.userService.user.isAuth);
+  canLoad(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> {
+    return of(this.userService.user.isAuth);
   }
 }

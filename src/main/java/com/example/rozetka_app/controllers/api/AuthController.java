@@ -4,6 +4,7 @@ import com.example.rozetka_app.models.AppUser;
 import com.example.rozetka_app.repositories.UserRepository;
 import com.example.rozetka_app.security.AppSecurityUserRoles;
 import com.example.rozetka_app.security.SecurityAppUser;
+import com.example.rozetka_app.services.ResponseDataType;
 import com.example.rozetka_app.services.ResponseService;
 import com.example.rozetka_app.statuscodes.DefinedErrors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth/sign-up")
@@ -46,8 +48,6 @@ public class AuthController {
         if (!bindingResult.hasErrors()) {
             AppUser appUser = this.userRepository.findAppUserByUsername(user.getUsername());
 
-            System.out.println(user.getPassword() + "!!!!");
-
             if (appUser == null) {
                 SecurityAppUser securityUser = new SecurityAppUser(
                         user.getUsername(),
@@ -57,10 +57,11 @@ public class AuthController {
 
                 if (securityUser.getRole() != null) {
                     user.setRole(securityUser.getRole());
-                    userRepository.save(user);
+                    user = userRepository.save(user);
                     authenticateUser(securityUser);
 
                     this.responseService.setStatus("ok");
+                    this.responseService.setData(Map.of("id", user.getId()));
                 }
             } else {
                 this.responseService.addFullErrorsInfo(DefinedErrors.AUTH_USER_EXISTS.getAllInfo());

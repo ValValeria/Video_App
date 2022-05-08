@@ -11,10 +11,11 @@ public class SecurityAppUser implements UserDetails {
     private final Collection<? extends GrantedAuthority> authorities;
     private String role;
 
-    public SecurityAppUser(String username,
-                           String password,
-                           Collection<? extends GrantedAuthority> authorities
-                   ) {
+    public SecurityAppUser(
+            String username,
+            String password,
+            Collection<? extends GrantedAuthority> authorities
+    ) {
         this.password = password;
         this.username = username;
         this.authorities = authorities;

@@ -6,7 +6,10 @@ import {Router} from "@angular/router";
 import {ErrorStateMatcher} from "@angular/material/core";
 
 import {UserService} from "../../services/user.service";
-import {IResponseType, ITokens} from "../../types/interfaces";
+import {IResponseType, IUser} from "../../types/interfaces";
+import {UserModel} from "../../models/user.model";
+import {Roles} from "../../types/roles";
+import {authFormSubject$} from "../../subjects/auth-form.subject";
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -18,7 +21,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 @Component({
   selector: 'app-auth-form',
   templateUrl: './auth-form.component.html',
-  styleUrls: ['./auth-form.component.scss']
+  styleUrls: ['./auth-form.component.scss'],
 })
 export class AuthFormComponent implements OnChanges {
   @Input()
@@ -48,7 +51,8 @@ export class AuthFormComponent implements OnChanges {
           Validators.min(10),
           Validators.pattern(/[aA-zZ]/gi)
         ]
-      )]
+      )],
+      email: ['']
     });
 
     this.matcher = new MyErrorStateMatcher();
@@ -56,32 +60,52 @@ export class AuthFormComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     let value = changes['isLogin'].currentValue;
+    const validators = [
+      Validators.email,
+      Validators.required,
+      Validators.max(25),
+      Validators.min(10)
+    ];
 
     if (value === true) {
-      this.form.removeControl("email");
+      this.email.removeValidators(validators);
     } else if (!this.form.contains("email")) {
-      const control = this.formBuilder.control(
-        "",
-        Validators.compose([
-          Validators.email,
-          Validators.required,
-          Validators.max(25),
-          Validators.min(10)
-        ])
-      );
-      this.form.addControl("email", control);
+      this.email.addValidators(validators);
     }
+
+    this.email.updateValueAndValidity();
   }
 
   async submit(): Promise<void> {
     if (this.form.valid) {
-      this.httpClient.post<IResponseType<ITokens>>('/api/auth/sign-up', this.form.value).subscribe(v => {
+      const url: string = this.isLogin ? '/api/auth/login' : '/api/auth/sign-up';
+
+      this.httpClient.post<IResponseType<{id: number, role: Roles}>>(url, this.form.value).subscribe(v => {
         if (v.status === "ok") {
-          this.userService.user.isAuth = true;
+          const user: IUser = new UserModel();
+
+          user.id = v.data.id;
+          user.username = this.username.value;
+          user.password = this.password.value;
+          user.role = v.data.role ?? Roles.USER;
+
+          this.userService.login(this.form.value as IUser);
+
+          authFormSubject$.next();
 
           this.router.navigateByUrl("/");
+
+          localStorage.setItem("auth", JSON.stringify({
+            id: user.id,
+            username: user.username,
+            password: user.password
+          }));
         } else {
-          this.snackBar.open("Some errors have occurred", "Close");
+          if (this.isLogin) {
+            this.snackBar.open("No user with such username is in our database", "Close");
+          } else {
+            this.snackBar.open("User with such username is already in our database", "Close");
+          }
         }
       });
     } else {
