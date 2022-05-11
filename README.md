@@ -1,10 +1,25 @@
 # Video app
-The app is under development
+It is template for adding videos on website. 
 
 ## What you need to set up
 * Java
 * MySql
 * Tomcat
+
+## Technologies
+* Java
+* Angular
+* Spring
+* SQL
+
+![img.png](img.png)
+> Home page
+
+![img_1.png](img_1.png)
+> Videos
+
+![img_2.png](img_2.png)
+> Contact us
 
 ## How to run the app
 * Firstly, run the following sql queries: <br/>
